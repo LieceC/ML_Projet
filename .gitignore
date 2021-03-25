@@ -85,7 +85,7 @@ venv/
 ENV/
 
 # Spyder project settings
-.spyderproject
+.spyderproject/*/*
 
 # Rope project settings
 .ropeproject
