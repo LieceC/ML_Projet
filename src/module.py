@@ -6,8 +6,7 @@ class Module(object):
         self._gradient = None
 
     def zero_grad(self):
-        ## Annule gradient
-        pass
+        self._gradient = np.zeros(self._gradient.shape)
 
     def forward(self, X):
         ## Calcule la passe forward
