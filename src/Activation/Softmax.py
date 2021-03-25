@@ -1,6 +1,6 @@
 import numpy as np
 
-from module import Module
+from src.Module.module import Module
 
 
 class Softmax(Module):
