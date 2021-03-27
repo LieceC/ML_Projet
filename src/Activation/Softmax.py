@@ -11,17 +11,11 @@ class Softmax(Module):
         self._gradient = np.zeros(self._gradient.shape)
 
     def forward(self, X):
-        return np.exp(X) / np.sum(np.exp(X), axis=0)  # Ou axis = 1 ?
-
-    def update_parameters(self, gradient_step=1e-3):
-        # Pas de parametres dans une fonction d'activation
-        pass
+        e = np.exp(X)
+        return e / np.sum(e, axis=1)
 
     def backward_update_gradient(self, input, delta):
         ## Met a jour la valeur du gradient
-        pass
-
-
-    def backward_delta(self, input, delta):
-        ## Calcul la derivee de l'erreur
-        pass
+        e = np.exp(input)
+        sft = e / np.sum(e, axis=1)
+        return delta * sft * (1 - sft)

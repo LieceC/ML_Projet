@@ -5,7 +5,7 @@ import numpy as np
 
 import src.utils.mltools as tools
 from src.Loss.MSELoss import MSELoss
-from src.Module.Linear import Linear
+from src.Module.linear import Linear
 
 
 def test_dim_linear():
