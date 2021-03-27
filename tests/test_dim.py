@@ -3,7 +3,7 @@ Faire des tests sur les dimensions des fonctions, rapide juste un assert pour ê
 '''
 import numpy as np
 
-import utils.mltools as tools
+import src.utils.mltools as tools
 from src.Loss.MSELoss import MSELoss
 from src.Module.Linear import Linear
 
@@ -30,7 +30,6 @@ def test_dim_linear():
     assert (hidden_l.shape == (len(datax), output_size))
     loss = m_mse.forward(hidden_l, datay_r)
     assert (loss.shape == (len(datax),))
-
     # Etape Backward
     loss_back = m_mse.backward(hidden_l, datay_r)
     assert (loss_back.shape == (len(datax), output_size))

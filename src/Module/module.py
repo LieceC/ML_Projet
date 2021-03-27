@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Module(object):
     def __init__(self):
         self._parameters = None
