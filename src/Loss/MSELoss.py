@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from loss import Loss
+from src.Loss.loss import Loss
 
 
 class MSELoss(Loss):
