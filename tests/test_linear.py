@@ -48,9 +48,7 @@ def test_linear():
         # print("parameters",m_linear._parameters)
         # Etape Backward
         loss_back = m_bce.backward(hidden_l, datay_r)
-        delta_linear = m_linear.backward_delta(datax, loss_back)
-        
-        m_linear.backward_update_gradient(datax, delta_linear)
+        m_linear.backward_update_gradient(datax, loss_back)
         # print("gradient",m_linear._gradient)
         m_linear.update_parameters(gradient_step = gradient_step)
         m_linear.zero_grad()
