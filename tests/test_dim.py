@@ -5,7 +5,7 @@ import numpy as np
 
 import src.utils.mltools as tools
 from src.Loss.MSELoss import MSELoss
-from src.Module.linear import Linear
+from src.Module.Linear import Linear
 
 
 def test_dim_linear():
@@ -31,11 +31,12 @@ def test_dim_linear():
     loss = m_mse.forward(hidden_l, datay_r)
     assert (loss.shape == (len(datax),))
     # Etape Backward
-    loss_back = m_mse.backward(hidden_l, datay_r)
+    loss_back = m_mse.backward(datay_r ,hidden_l)
     assert (loss_back.shape == (len(datax), output_size))
     delta_linear = m_linear.backward_delta(datax, loss_back)
-    assert (delta_linear.shape == (len(datax), output_size))
-
+    # sortie de taille (nb entrées, nombre de données)
+    assert (delta_linear.shape == (input_size,len(datax)))
+    
 
 if __name__ == '__main__':
     test_dim_linear()

@@ -17,4 +17,4 @@ class Linear(Module):
         self._gradient += np.dot(input.T, delta)
 
     def backward_delta(self, input, delta):
-        return np.dot(delta, self._parameters)
+        return np.dot(self._parameters,delta.T)

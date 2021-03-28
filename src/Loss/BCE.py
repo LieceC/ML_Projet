@@ -16,3 +16,4 @@ class BCE(Loss):
 
     def backward(self, y, yhat, eps=10e-10):
         return -((y - yhat) / ((yhat - 1) * yhat + eps))
+
