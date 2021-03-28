@@ -35,7 +35,7 @@ def test_dim_linear():
     assert (loss_back.shape == (len(datax), output_size))
     delta_linear = m_linear.backward_delta(datax, loss_back)
     # sortie de taille (nb entrées, nombre de données)
-    assert (delta_linear.shape == (input_size,len(datax)))
+    assert (delta_linear.shape == (len(datax),input_size))
     
 
 if __name__ == '__main__':

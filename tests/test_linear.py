@@ -9,9 +9,11 @@ from src.Module.Linear import Linear
 
 
 def test_linear():
+    coef1 = 58
+    coef2 = 24
     # fonction linéair que l'on apprend
     def f(x1,x2):
-        return x1*58 - 24*x2
+        return x1*coef1 - coef2*x2
     
     # données d'entrainement avec bruit
     def f_bruit(x1,x2):
@@ -81,6 +83,7 @@ def test_linear():
     testx = np.concatenate((x1,x2),axis=1)
     hidden_l = m_linear.forward(testx)
     print("max différence res:",np.max(hidden_l - testy))
-    
+    print("parameters:",str(m_linear._parameters))
+    print("valeurs voulues:",str([[coef1],[coef2]]))
 if __name__ == '__main__':
     test_linear()
