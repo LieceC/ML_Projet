@@ -3,10 +3,7 @@ import numpy as np
 from src.Module.module import Module
 
 
-class TanH(Module):
-    def __init__(self):
-        super.__init__(self)
-
+class Sigmoid(Module):
     def forward(self, X):
         return 1 / (1 + (np.exp(-X)))
 

@@ -4,6 +4,7 @@ Faire des tests sur les dimensions des fonctions, rapide juste un assert pour Ãª
 import numpy as np
 
 import src.utils.mltools as tools
+from src.Activation.sigmoid import Sigmoid
 from src.Loss.MSELoss import MSELoss
 from src.Module.Linear import Linear
 
@@ -25,18 +26,23 @@ def test_dim_linear():
     # Initialize modules with respective size
     m_mse = MSELoss()
     m_linear = Linear(input_size, output_size)
+    m_sigmoid = Sigmoid()
     # Etape forward
     hidden_l = m_linear.forward(datax)
     assert (hidden_l.shape == (len(datax), output_size))
+    act_l = m_sigmoid.forward(hidden_l)
+    assert (act_l.shape == hidden_l.shape)
     loss = m_mse.forward(hidden_l, datay_r)
     assert (loss.shape == (len(datax),))
     # Etape Backward
-    loss_back = m_mse.backward(datay_r ,hidden_l)
+    loss_back = m_mse.backward(datay_r, hidden_l)
     assert (loss_back.shape == (len(datax), output_size))
-    delta_linear = m_linear.backward_delta(datax, loss_back)
-    # sortie de taille (nb entrées, nombre de données)
-    assert (delta_linear.shape == (len(datax),input_size))
-    
+    delta_funcact = m_sigmoid.backward_delta(hidden_l, loss_back)
+    assert (loss_back.shape == delta_funcact.shape)
+    delta_linear = m_linear.backward_delta(datax, delta_funcact)
+    # sortie de taille (nb entrï¿½es, nombre de donnï¿½es)
+    assert (delta_linear.shape == (len(datax), input_size))
+
 
 if __name__ == '__main__':
     test_dim_linear()

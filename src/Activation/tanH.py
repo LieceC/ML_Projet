@@ -4,9 +4,6 @@ from src.Module.module import Module
 
 
 class TanH(Module):
-    def __init__(self):
-        super.__init__(self)
-
     def forward(self, X):
         return np.tanh(X)
 
