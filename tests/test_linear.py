@@ -9,11 +9,11 @@ from src.Module.Linear import Linear
 
 
 def test_linear():
-    coef1 = 58
+    coef1 = 56
     coef2 = 24
     # fonction linéair que l'on apprend
     def f(x1,x2):
-        return x1*coef1 - coef2*x2
+        return x1*coef1 + coef2*x2
     
     # données d'entrainement avec bruit
     def f_bruit(x1,x2):

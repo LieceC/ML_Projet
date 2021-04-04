@@ -8,9 +8,9 @@ class TanH(Module):
         super.__init__(self)
 
     def forward(self, X):
-        return 1 / 1 + (np.exp(-X))
+        return 1 / (1 + (np.exp(-X)))
 
     def backward_delta(self, input, delta):
         ## Calcul la derivee de l'erreur
-        sig = 1 / 1 + np.exp(-input)
+        sig = 1 / (1 + np.exp(-input))
         return delta * (sig * (1 - sig))
