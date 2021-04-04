@@ -25,19 +25,20 @@ def test_non_linear():
     
     # Input and Output size of our NN
     input_size = len(datax[0])
-    hidden_size = 3
+    hidden_size = 5
     final_size = 1
 
 
     # Initialize modules with respective size
-    iteration = 100
-    gradient_step = 10e-5
+    iteration = 10
+    gradient_step = 10e-3
 
-    m_linear_first = Linear(input_size, hidden_size)
-    m_linear_second = Linear(hidden_size, final_size)
+    m_linear_first = Linear(input_size, hidden_size, bias = True)
+    m_linear_second = Linear(hidden_size, final_size, bias = True)
     m_sig = Sigmoid()
     m_tanh = TanH()
     m_mse = MSELoss()
+    print(m_linear_first._bias_parameters)
     
     for _ in range(iteration):
        
@@ -60,12 +61,16 @@ def test_non_linear():
         # print(loss_back)
         # print(m_linear._parameters)
 
-        m_linear_first.backward_update_gradient(datax, loss_back)
-        m_linear_second.backward_update_gradient(hidden_l_tanh, loss_back)
+        m_linear_second.backward_update_gradient(hidden_l_tanh, delta_sigmoid)
+        m_linear_first.backward_update_gradient(datax, delta_tanh)
+        
         # print("gradient",m_linear._gradient)
-        m_linear_first.update_parameters(gradient_step = gradient_step)
-        m_linear_first.zero_grad()
+        
         m_linear_second.update_parameters(gradient_step = gradient_step)
+        m_linear_first.update_parameters(gradient_step = gradient_step)
+        
+        
+        m_linear_first.zero_grad()
         m_linear_second.zero_grad()
         
     def yhat(x):
@@ -73,12 +78,13 @@ def test_non_linear():
         hidden_l_tanh = m_tanh.forward(hidden_l)
         hidden_l2 = m_linear_second.forward(hidden_l_tanh)
         yhat = m_sig.forward(hidden_l2)  
-        return np.where(yhat > 0.5,1, -1)
+        return np.where(yhat >= 0.5,1, -1)
     
     
     tools.plot_frontiere(testx, yhat, step=100)
     tools.plot_data(testx, testy.reshape(-1))
-    print(m_linear_first._parameters)
+    print(m_linear_first._bias_parameters)
+    print(m_linear_second._bias_parameters)
     
 if __name__ == '__main__':
     test_non_linear()

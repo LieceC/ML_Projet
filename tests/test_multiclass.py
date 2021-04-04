@@ -7,9 +7,10 @@ import sklearn.metrics as skt
 from src.Activation.Softmax import Softmax
 from src.Activation.sigmoid import Sigmoid
 from src.Loss.BCE import BCE
+from src.Loss.MSELoss import MSELoss
 from src.Module.Linear import Linear
 from src.utils.utils import load_usps
-
+import matplotlib.pyplot as plt 
 
 def transform_numbers(input, size):
     """Assume 1D array as input, len is the number of example
@@ -28,8 +29,8 @@ def test_multiclass():
     testy = np.where(testy == neg, -1, 1)
     :return:
     """
-    uspsdatatrain = "../data/USPS_train.txt"
-    uspsdatatest = "../data/USPS_test.txt"
+    uspsdatatrain = "data/USPS_train.txt"
+    uspsdatatest = "data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     input_size = len(alltrainx[0])
@@ -52,12 +53,12 @@ def test_multiclass():
         act1 = m_act1.forward(hidden_l1)
         hidden_l2 = m_linear2.forward(act1)
         act2 = m_act2.forward(hidden_l2)
-        loss = m_loss.forward(act2, alltrainy_proba)
+        loss = m_loss.forward(alltrainy_proba,act2)
         print("max loss:", np.max(loss))
         # print("parameters",m_linear._parameters)
         # Etape Backward
         loss_back = m_loss.backward(alltrainy_proba, act2)
-        act2_back = m_act2.backward_delta(act2, loss_back)
+        act2_back = m_act2.backward_delta(hidden_l2, loss_back)
         hidden_l2_back = m_linear2.backward_delta(act1, act2_back)
         act1_back = m_act1.backward_delta(hidden_l1, hidden_l2_back)
         hidden_l1_back = m_linear.backward_delta(alltrainx, act1_back)
@@ -67,8 +68,8 @@ def test_multiclass():
         m_linear.backward_update_gradient(alltrainx, act1_back)
 
         # update parameters
-        m_linear2.update_parameters()
-        m_linear.update_parameters()
+        m_linear2.update_parameters(gradient_step=gradient_step)
+        m_linear.update_parameters(gradient_step=gradient_step)
 
         m_linear.zero_grad()
         m_linear2.zero_grad()
@@ -79,8 +80,8 @@ def test_multiclass():
     act2 = m_act2.forward(hidden_l2)
     predict = np.argmax(act2, axis=1)
 
-    skt.confusion_matrix(predict, alltesty)
-
+    res = skt.confusion_matrix(predict, alltesty)
+    plt.imshow(res)
 
 if __name__ == '__main__':
     test_multiclass()
