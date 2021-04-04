@@ -9,44 +9,25 @@ from src.Module.Linear import Linear
 
 def test_linear():
     coef1 = 58
-    coef2 = 24
+    coef2 = - 24
 
     # fonction linéair que l'on apprend
     def f(x1, x2):
-        return x1 * coef1 - coef2 * x2
+        return x1 * coef1 + coef2 * x2
 
     # données d'entrainement avec bruit
     def f_bruit(x1, x2):
         bruit = np.random.normal(0, 1, len(x1)).reshape((-1, 1))
         return f(x1, x2) + bruit
 
-    '''
-    # generation of tests data
-    datax, datay = tools.gen_arti(centerx=1, centery=1, sigma=0.1, nbex=1000, data_type=0, epsilon=0.1)
-    testx, testy = tools.gen_arti(centerx=1, centery=1, sigma=0.1, nbex=1000, data_type=0, epsilon=0.1)
-    
-    datay_r = np.zeros((len(datay), 2))
-    # Re-arranging data to compute a probability
-    for y in range(len(datay)):
-        if datay[y] == -1:
-            datay_r[y][0] = 1
-        elif datay[y] == 1:
-            datay_r[y][1] = 1
-    testy_r = np.zeros((len(datay), 2))
-    for y in range(len(testy)):
-        if testy[y] == -1:
-            testy_r[y][0] = 1
-        elif testy[y] == 1:
-            testy_r[y][1] = 1
-    '''
     nb_data = 100
     x1 = np.random.uniform(-10, 10, nb_data)
     x2 = np.random.uniform(-10, 10, nb_data)
     x1 = x1.reshape((-1, 1))
     x2 = x2.reshape((-1, 1))
     datay = f_bruit(x1, x2)
+    
     datax = np.concatenate((x1, x2), axis=1)
-
     # Input and Output size of our NN
     input_size = len(datax[0])
     output_size = 1

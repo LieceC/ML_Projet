@@ -6,9 +6,12 @@ from src.Module.module import Module
 
 
 class Linear(Module):
-    def __init__(self, input, output):
+    def __init__(self, input, output, bias = False):
         self._parameters = np.ones((input, output))
         self._gradient = np.zeros((input, output))
+        self._bias = bias
+        if self._bias:
+            self._bias_parameters = np.ones((1,output))
 
     def forward(self, X):
         return np.dot(X, self._parameters)
