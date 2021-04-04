@@ -6,6 +6,8 @@ from src.Module.module import Module
 class Softmax(Module):
     def forward(self, X):
         e = np.exp(X)
+        print(e.shape)
+        print(len(np.sum(e, axis=1)))
         return e / np.sum(e, axis=1)
 
     def backward_delta(self, input, delta):
