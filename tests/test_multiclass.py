@@ -6,8 +6,10 @@ import sklearn.metrics as skt
 
 from src.Activation.Softmax import Softmax
 from src.Activation.sigmoid import Sigmoid
+from src.Activation.tanH import TanH
 from src.Loss.BCE import BCE
 from src.Loss.MSELoss import MSELoss
+from src.Loss.CESoftMax import CESoftMax
 from src.Module.Linear import Linear
 from src.utils.utils import load_usps
 import matplotlib.pyplot as plt 
@@ -38,33 +40,45 @@ def test_multiclass():
     alltrainy_proba = transform_numbers(alltrainy, output_size)
 
     # Initialize modules with respective size
-    iteration = 30
+    iteration = 100
     gradient_step = 10e-5
     arbitrary_neural = 128
     m_linear = Linear(input_size, arbitrary_neural)
     m_act1 = Sigmoid()
     m_linear2 = Linear(arbitrary_neural, output_size)
     m_act2 = Softmax()
-    m_loss = BCE()
-
+    # m_loss = BCE()
+    m_loss = CESoftMax()
     for _ in range(iteration):
         # Etape forward
         hidden_l1 = m_linear.forward(alltrainx)
         act1 = m_act1.forward(hidden_l1)
         hidden_l2 = m_linear2.forward(act1)
-        act2 = m_act2.forward(hidden_l2)
-        loss = m_loss.forward(alltrainy_proba,act2)
-        print("max loss:", np.max(loss))
+        # act2 = m_act2.forward(hidden_l2)
+        # loss = m_loss.forward(alltrainy_proba,act2)
+        loss = m_loss.forward(alltrainy_proba,hidden_l2)
+        print()
+        print("max loss:", np.mean(loss,axis=0))
+        
         # print("parameters",m_linear._parameters)
         # Etape Backward
-        loss_back = m_loss.backward(alltrainy_proba, act2)
-        act2_back = m_act2.backward_delta(hidden_l2, loss_back)
-        hidden_l2_back = m_linear2.backward_delta(act1, act2_back)
+        
+        loss_back = m_loss.backward(alltrainy_proba, hidden_l2)
+        print("loss_back",np.min(loss_back),np.max(loss_back))
+        # loss_back = m_loss.backward(alltrainy_proba, act2)
+        # act2_back = m_act2.backward_delta(hidden_l2, loss_back)
+        # hidden_l2_back = m_linear2.backward_delta(act1, act2_back)
+        hidden_l2_back = m_linear2.backward_delta(act1, loss_back)
+        print("hidden_l2_back",np.min(hidden_l2_back),np.max(hidden_l2_back))
         act1_back = m_act1.backward_delta(hidden_l1, hidden_l2_back)
+        print("act1_back",np.min(act1_back),np.max(act1_back))
+        
         hidden_l1_back = m_linear.backward_delta(alltrainx, act1_back)
-
+        print("hidden_l1_back",np.min(hidden_l1_back),np.max(hidden_l1_back))
+        
         #update gradient
-        m_linear2.backward_update_gradient(act1, act2_back)
+        # m_linear2.backward_update_gradient(act1, act2_back)
+        m_linear2.backward_update_gradient(act1, loss_back)
         m_linear.backward_update_gradient(alltrainx, act1_back)
 
         # update parameters
@@ -81,6 +95,7 @@ def test_multiclass():
     predict = np.argmax(act2, axis=1)
 
     res = skt.confusion_matrix(predict, alltesty)
+    print(np.sum(np.where(predict==alltesty,1,0))/len(predict))
     plt.imshow(res)
 
 if __name__ == '__main__':
