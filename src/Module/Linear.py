@@ -7,11 +7,12 @@ from src.Module.module import Module
 
 class Linear(Module):
     def __init__(self, input, output, bias = False):
-        self._parameters = np.ones((input, output))
+        self._parameters = 2*np.random.rand(input, output) - 1
+        print(self._parameters)
         self._gradient = np.zeros((input, output))
         self._bias = bias
         if self._bias:
-            self._bias_parameters = np.ones((1,output))
+            self._bias_parameters = 2*np.random.rand(1,output) - 1
             self._bias_gradient = np.zeros((1,output))
 
     def forward(self, X):
@@ -22,7 +23,7 @@ class Linear(Module):
     def backward_update_gradient(self, input, delta):
         self._gradient += np.dot(input.T, delta)
         if self._bias:
-            print(np.sum(delta, axis = 0))
+            # print(np.sum(delta, axis = 0))
             self._bias_gradient += np.sum(delta, axis = 0)
 
     def update_parameters(self, gradient_step=1e-3):

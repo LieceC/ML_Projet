@@ -20,17 +20,16 @@ def test_non_linear():
     
     datay = np.where(datay==-1,0,1)
     testy = np.where(testy==-1,0,1)
-    
     nb_data = len(datax)
     
     # Input and Output size of our NN
     input_size = len(datax[0])
-    hidden_size = 5
+    hidden_size = 3
     final_size = 1
-
+    
 
     # Initialize modules with respective size
-    iteration = 10
+    iteration = 1000
     gradient_step = 10e-3
 
     m_linear_first = Linear(input_size, hidden_size, bias = True)
@@ -38,8 +37,7 @@ def test_non_linear():
     m_sig = Sigmoid()
     m_tanh = TanH()
     m_mse = MSELoss()
-    print(m_linear_first._bias_parameters)
-    
+
     for _ in range(iteration):
        
         # Etape forward
@@ -47,7 +45,7 @@ def test_non_linear():
         hidden_l_tanh = m_tanh.forward(hidden_l)
         hidden_l2 = m_linear_second.forward(hidden_l_tanh)
         hidden_l2_sigmoid = m_sig.forward(hidden_l2)
-        loss = m_mse.forward(hidden_l2_sigmoid, datay)
+        loss = m_mse.forward(datay,hidden_l2_sigmoid)
         
         print("max loss:",np.max(loss))
         # print("parameters",m_linear._parameters)
@@ -80,11 +78,8 @@ def test_non_linear():
         yhat = m_sig.forward(hidden_l2)  
         return np.where(yhat >= 0.5,1, -1)
     
-    
     tools.plot_frontiere(testx, yhat, step=100)
     tools.plot_data(testx, testy.reshape(-1))
-    print(m_linear_first._bias_parameters)
-    print(m_linear_second._bias_parameters)
     
 if __name__ == '__main__':
     test_non_linear()
