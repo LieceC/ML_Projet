@@ -10,10 +10,10 @@ from src.Module.Linear import Linear
 def test_linear():
     coef1 = 58
     coef2 = - 24
-
+    bias = 10
     # fonction linéair que l'on apprend
     def f(x1, x2):
-        return x1 * coef1 + coef2 * x2
+        return x1 * coef1 + coef2 * x2 + bias
 
     # données d'entrainement avec bruit
     def f_bruit(x1, x2):
@@ -33,7 +33,7 @@ def test_linear():
     output_size = 1
 
     # Initialize modules with respective size
-    iteration = 30
+    iteration = 1000
     gradient_step = 10e-5
     m_mse = MSELoss()
     m_linear = Linear(input_size, output_size)
@@ -66,6 +66,8 @@ def test_linear():
     print("max différence res:", np.max(hidden_l - testy))
     print("parameters:", str(m_linear._parameters))
     print("valeurs voulues:", str([[coef1], [coef2]]))
+    print("biais:", str(m_linear._bias_parameters))
+    print("valeurs voulues:", str([bias]))
 
 
 if __name__ == '__main__':

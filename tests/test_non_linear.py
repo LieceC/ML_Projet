@@ -29,7 +29,7 @@ def test_non_linear():
     
 
     # Initialize modules with respective size
-    iteration = 1000
+    iteration = 100
     gradient_step = 10e-3
 
     m_linear_first = Linear(input_size, hidden_size, bias = True)
