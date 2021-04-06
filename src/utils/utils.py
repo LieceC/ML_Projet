@@ -31,3 +31,15 @@ def get_usps(l, datax, datay):
         return resx, resy
     tmp = list(zip(*[get_usps(i, datax, datay) for i in l]))
     return np.vstack(tmp[0]), np.hstack(tmp[1])
+
+
+def unison_shuffled_copies(a, b):
+    assert len(a) == len(b)
+    p = np.random.permutation(len(a))
+    return a[p], b[p]
+
+
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
