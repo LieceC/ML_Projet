@@ -6,32 +6,32 @@ from src.Module.module import Module
 
 
 class Linear(Module):
-    def __init__(self, input, output, bias = True):
-        self._parameters = 2*np.random.rand(input, output) - 1
+    def __init__(self, input, output, bias=True):
+        self._parameters = 2 * np.random.rand(input, output) - 1
         print(self._parameters)
         self._gradient = np.zeros((input, output))
         self._bias = bias
         if self._bias:
-            self._bias_parameters = 2*np.random.rand(1,output) - 1
-            self._bias_gradient = np.zeros((1,output))
+            self._bias_parameters = 2 * np.random.rand(1, output) - 1
+            self._bias_gradient = np.zeros((1, output))
 
     def forward(self, X):
         if self._bias:
             return np.dot(X, self._parameters) + self._bias_parameters
-        return np.dot(X, self._parameters) 
+        return np.dot(X, self._parameters)
 
     def backward_update_gradient(self, input, delta):
         self._gradient += np.dot(input.T, delta)
         if self._bias:
             # print(np.sum(delta, axis = 0))
-            self._bias_gradient += np.sum(delta, axis = 0)
+            self._bias_gradient += np.sum(delta, axis=0)
 
     def update_parameters(self, gradient_step=1e-3):
         ## Calcule la mise a jour des parametres selon le gradient calcule et le pas de gradient_step
         self._parameters -= gradient_step * self._gradient
         if self._bias:
             self._bias_parameters -= gradient_step * self._bias_gradient
-    
+
     def zero_grad(self):
         self._gradient = np.zeros(self._gradient.shape)
         if self._bias:
