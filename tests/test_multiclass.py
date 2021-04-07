@@ -39,8 +39,8 @@ def test_multiclass():
 
     # Initialize modules with respective size
     iteration = 100
-    gradient_step = 1e-2
-    arbitrary_neural = 24
+    gradient_step = 10e-5
+    arbitrary_neural = 128
     m_linear = Linear(input_size, arbitrary_neural)
     m_act1 = TanH()
     m_linear2 = Linear(arbitrary_neural, output_size)
@@ -57,6 +57,9 @@ def test_multiclass():
         loss = m_loss.forward(alltrainy_proba, hidden_l2)
         # print("max loss:", np.mean(loss, axis=0))
 
+        loss = m_loss.forward(alltrainy_proba,hidden_l2)
+        print("max loss:", np.mean(loss))
+        
         # print("parameters",m_linear._parameters)
         # Etape Backward
 
@@ -69,7 +72,6 @@ def test_multiclass():
         # print("hidden_l2_back",np.min(hidden_l2_back),np.max(hidden_l2_back))
         act1_back = m_act1.backward_delta(hidden_l1, hidden_l2_back)
         # print("act1_back",np.min(act1_back),np.max(act1_back))
-
         hidden_l1_back = m_linear.backward_delta(alltrainx, act1_back)
         # print("hidden_l1_back",np.min(hidden_l1_back),np.max(hidden_l1_back))
 
@@ -90,7 +92,7 @@ def test_multiclass():
     hidden_l2 = m_linear2.forward(act1)
     act2 = m_act2.forward(hidden_l2)
     predict = np.argmax(act2, axis=1)
-
+    
     res = skt.confusion_matrix(predict, alltesty)
     print(np.sum(np.where(predict == alltesty, 1, 0)) / len(predict))
     plt.imshow(res)

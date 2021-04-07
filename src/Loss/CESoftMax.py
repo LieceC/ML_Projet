@@ -10,7 +10,7 @@ class CESoftMax(Loss):
         batch : nombre d'exemples
         d : nombre de classes
         '''
-        return - y * yhat + np.log(np.sum(np.exp(yhat), axis=1)[...,None])
+        return (- np.sum(y * yhat,axis=1) + np.log(np.sum(np.exp(yhat), axis=1)[...,None]))
 
     def backward(self, y, yhat, eps=10e-10):
         e = np.exp(yhat)
@@ -23,7 +23,7 @@ class CE(Loss):
         batch : nombre d'exemples
         d : nombre de classes
         '''
-        return - y * yhat
+        return - np.sum(y * yhat,axis=1)
 
     def backward(self, y, yhat, eps=10e-10):
         return - y
