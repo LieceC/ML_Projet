@@ -8,9 +8,9 @@ from src.Module.Linear import Linear
 
 
 def test_linear():
-    coef1 = 58
-    coef2 = - 24
-    bias = 10
+    coef1 = 1002
+    coef2 = 13
+    bias = 4
     # fonction linéair que l'on apprend
     def f(x1, x2):
         return x1 * coef1 + coef2 * x2 + bias
@@ -33,15 +33,15 @@ def test_linear():
     output_size = 1
 
     # Initialize modules with respective size
-    iteration = 1000
-    gradient_step = 10e-5
+    iteration = 30
+    gradient_step = 1e-3
     m_mse = MSELoss()
     m_linear = Linear(input_size, output_size)
 
     for _ in range(iteration):
         # Etape forward
         hidden_l = m_linear.forward(datax)
-        loss = m_mse.forward(hidden_l, datay)
+        loss = m_mse.forward(datay, hidden_l)
         print("max loss:", np.max(loss))
         # print("parameters",m_linear._parameters)
         # Etape Backward

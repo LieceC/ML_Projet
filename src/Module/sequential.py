@@ -13,7 +13,7 @@ class Sequential(Module):
     def forward(self, X):
         list = [X]
         for m in self._modules:
-            list.append(m.foward(list[-1]))
+            list.append(m.forward(list[-1]))
         return list
 
     def backward(self, list, delta):
@@ -21,18 +21,17 @@ class Sequential(Module):
         # Je suis pas sur, mais je crois que la loss du cout n'est pas ici, donc on ne doit
         # pas utiliser la dernier entrée dans le calcul du delta, mais l'avant dernier.
         list = list[:-1]
-        for m in list[::-1]:
-            m.backward_update_gradient(m, d)
-            d = m.backward_delta(m, d)
+        
+        for m, i in zip(self._modules[::-1], list[::-1]):
+            m.backward_update_gradient(i, d)
+            d = m.backward_delta(i, d)
         return d
 
     def update_parameters(self, eps):
-        for m in list:
-            m.update_parameters(m, eps)
+        for m in self._modules:
+            m.update_parameters(eps)
 
     def zero_grad(self):
-        for m in list:
-            m.zero_grad(m)
+        for m in self._modules:
+            m.zero_grad()
 
-    def predict(self, X):
-        return np.argmax(self.forward(X), axis=1)

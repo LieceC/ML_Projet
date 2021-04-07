@@ -29,8 +29,8 @@ def test_multiclass():
     testy = np.where(testy == neg, -1, 1)
     :return:
     """
-    uspsdatatrain = "../data/USPS_train.txt"
-    uspsdatatest = "../data/USPS_test.txt"
+    uspsdatatrain = "data/USPS_train.txt"
+    uspsdatatest = "data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     input_size = len(alltrainx[0])
@@ -52,6 +52,7 @@ def test_multiclass():
         hidden_l1 = m_linear.forward(alltrainx)
         act1 = m_act1.forward(hidden_l1)
         hidden_l2 = m_linear2.forward(act1)
+
         # act2 = m_act2.forward(hidden_l2)
         # loss = m_loss.forward(alltrainy_proba,act2)
         loss = m_loss.forward(alltrainy_proba, hidden_l2)
@@ -59,7 +60,7 @@ def test_multiclass():
 
         loss = m_loss.forward(alltrainy_proba,hidden_l2)
         print("max loss:", np.mean(loss))
-        
+        print(loss.shape)
         # print("parameters",m_linear._parameters)
         # Etape Backward
 
@@ -69,6 +70,7 @@ def test_multiclass():
         # act2_back = m_act2.backward_delta(hidden_l2, loss_back)
         # hidden_l2_back = m_linear2.backward_delta(act1, act2_back)
         hidden_l2_back = m_linear2.backward_delta(act1, loss_back)
+    
         # print("hidden_l2_back",np.min(hidden_l2_back),np.max(hidden_l2_back))
         act1_back = m_act1.backward_delta(hidden_l1, hidden_l2_back)
         # print("act1_back",np.min(act1_back),np.max(act1_back))

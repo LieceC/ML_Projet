@@ -13,6 +13,7 @@ from src.Loss.CESoftMax import CESoftMax
 from src.Module.Linear import Linear
 from src.utils.utils import load_usps
 from src.Module.sequential import Sequential
+from src.Optim.Optim import Optim
 import matplotlib.pyplot as plt 
 
 
@@ -42,19 +43,23 @@ def test_multiclass():
     alltrainy_proba = transform_numbers(alltrainy, output_size)
 
     # Initialize modules with respective size
-    iteration = 10
-    gradient_step = 10e-5
+    iteration = 100
+    gradient_step = 1e-3
     arbitrary_neural = 128
+    batch_size = 100 # len(alltrainx)
+    
     m_linear = Linear(input_size, arbitrary_neural)
     m_act1 = Sigmoid()
     m_linear2 = Linear(arbitrary_neural, output_size)
     m_act2 = Softmax()
-    # m_loss = BCE()
     m_loss = CESoftMax()
-    seq = Sequential([m_linear,m_act1,m_linear2,m_act2])
     
+    seq = Sequential([m_linear,m_act1,m_linear2])
+    
+    opt = Optim(seq,loss=m_loss,eps = gradient_step)
+    opt.SGD(alltrainx,alltrainy_proba,batch_size, maxiter=iteration,verbose = True)
 
-    predict = seq.SGD()
+    predict = m_act2.forward(opt.predict(alltestx))
     predict = np.argmax(predict, axis=1)
 
     res = skt.confusion_matrix(predict, alltesty)

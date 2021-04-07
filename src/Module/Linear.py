@@ -8,7 +8,6 @@ from src.Module.module import Module
 class Linear(Module):
     def __init__(self, input, output, bias=True):
         self._parameters = 2 * np.random.rand(input, output) - 1
-        print(self._parameters)
         self._gradient = np.zeros((input, output))
         self._bias = bias
         if self._bias:
