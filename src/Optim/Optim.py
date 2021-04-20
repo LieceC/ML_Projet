@@ -39,6 +39,7 @@ class Optim(object):
                 losss[j] = self.step(datax_rand_batch[j], datay_rand_batch[j]).mean()
             if verbose == 1: 
                 print("iteration "+str(i)+":")
+                print("Loss")
                 print("mean - "+str(losss.mean()) + "\nstd - "+str(losss.std())) 
                 
     def predict(self, X):

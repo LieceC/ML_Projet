@@ -2,19 +2,20 @@ import numpy as np
 
 from src.Loss.loss import Loss
 
-
 class BCE(Loss):
-    def forward(self, y, yhat, eps=10e-10):
-        '''
-        y et yhat de taille (batch,d)
-        batch : nombre d'exemples
-        d : nombre de classes
-        '''
+    def forward(self, y, yhat):
+        """
+        input  : batch*d
+        output : batch
+        """
+        a = np.log(yhat)
+        a = np.where(a<-100,-100,a)
+        
+        b = np.log(1 - yhat)
+        b = np.where(np.isnan(b),-100,b)
 
-        # TODO Verifier la dimension de sortie
-        return -(y * np.max(-100,np.log(yhat + eps)) + 
-                 (1 - y) * np.max(-100,np.log(1 - yhat + eps)))
+        return - (y*a + (1-y)*b)
 
-    def backward(self, y, yhat, eps=10e-10):
-        return -((y - yhat) / ((yhat - 1) * yhat + eps))
+    def backward(self, y, yhat, eps = 1e-10):
+        return ((1-y)/(1-yhat +eps)) - (y/(yhat +eps))
 
