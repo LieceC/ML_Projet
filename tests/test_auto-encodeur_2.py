@@ -53,6 +53,7 @@ def cluster(comp_train, comp_test, alltrainy, alltesty):
 
     plt.imshow(only_argmax)
     plt.show()
+    plt.show()
 
     puretes = []
     for x in range(10):
@@ -67,14 +68,14 @@ def cluster(comp_train, comp_test, alltrainy, alltesty):
 
 def test_auto_encodeur():
     mnist = fetch_openml('mnist_784')
-    alltrainx, alltrainy = mnist.data.to_numpy()[:35000, :], mnist.target.to_numpy()[:35000]
-    alltestx, alltesty = mnist.data.to_numpy()[35000:, :], mnist.target.to_numpy()[35000:]
+    alltrainx, alltrainy = mnist.data.to_numpy()[:10000, :], np.intc(mnist.target.to_numpy()[:10000])
+    alltestx, alltesty = mnist.data.to_numpy()[10000:20000, :], np.intc(mnist.target.to_numpy()[10000:20000])
     alltestx, alltrainx = alltestx / 255, alltrainx / 255
 
     # Initialize modules with respective size
     iteration = 100
     gradient_step = 1e-3
-    batch_size = 10  # len(alltrainx)
+    batch_size = 50  # len(alltrainx)
     input_size = alltrainx.shape[1]
     hidden_size = 100
     compression_size = 10
