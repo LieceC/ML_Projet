@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# -*- coding: utf-8 -*-
+
 import numpy as np
 import sklearn.metrics as skt
 
@@ -16,7 +18,7 @@ import matplotlib.patches as mpatches
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
 from sklearn.metrics import confusion_matrix, adjusted_rand_score
-
+from sklearn.datasets import fetch_openml 
 def TNSE(alltesty,compression):
     """
     alltesty : y des données de test
@@ -63,8 +65,8 @@ def cluster(comp_train,comp_test,alltrainy,alltesty):
     return clusters_test
     
 def test_auto_encodeur():
-    uspsdatatrain = "data/USPS_train.txt"
-    uspsdatatest = "data/USPS_test.txt"
+    mnist = fetch_openml('mnist_784')
+    
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     alltrainx/=2
