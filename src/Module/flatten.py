@@ -8,10 +8,8 @@ class Flatten(Module):
 
     def forward(self, X):
         p = X
-        p.flatten(axis=1)
+        p = p.reshape(X.shape[0], X.shape[1] * X.shape[2])
         return p
 
     def backward_delta(self, input, delta):
-        z = delta
-        z.reshape(delta.shape[0], self._length, self._chan_in)
-        return z
+        return delta.reshape(delta.shape[0], self._length, self._chan_in)
