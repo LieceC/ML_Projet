@@ -5,6 +5,7 @@ from src.Module.module import Module
 
 class MaxPool1D(Module):
     def __init__(self, k_size, stride):
+        super().__init__()
         self._k_size = k_size
         self._stride = stride
 
@@ -22,12 +23,10 @@ class MaxPool1D(Module):
 
     def backward_delta(self, input, delta):
         array_pool = np.zeros(input.shape)
-        print(array_pool.shape)
-        print(self._argmax_array.shape)
-        print(delta.shape)
-        for x in range(0, input.shape[1]):
-            for y in range(0, array_pool.shape[0]):
-                array_pool[y, x, self._argmax_array[y, x]] = delta[y, x]
+        for f in range(input.shape[2]):
+            coord = self._argmax_array[:, :, f]
+            for x in range(input.shape[0]):
+                array_pool[x, coord[x], f] = delta[x, :, f]
         return array_pool
 
     '''

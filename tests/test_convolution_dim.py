@@ -26,13 +26,7 @@ def transform_numbers(input, size):
         datay_r[x][input[x]] = 1
     return datay_r
 
-
-def test_dim_conv():
-    pass
-
-
 if __name__ == '__main__':
-    test_dim_conv()
     # Get the data
     uspsdatatrain = "../data/USPS_train.txt"
     uspsdatatest = "../data/USPS_test.txt"
@@ -67,4 +61,4 @@ if __name__ == '__main__':
 
     # Train networks
     opt = Optim(net=net, loss=sftmax, eps=gradient_step)
-    opt.SGD(alltrainx, alltrainy_proba, batch_size, maxiter=iterations, verbose=False)
+    opt.SGD(alltrainx, alltrainy_proba, batch_size, maxiter=iterations, verbose=True)
