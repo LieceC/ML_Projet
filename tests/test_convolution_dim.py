@@ -14,6 +14,7 @@ from src.Module.sequential import Sequential
 from src.Optim.Optim import Optim
 from src.Pooling.maxPool1D import MaxPool1D
 from src.utils.utils import load_usps
+from src.Activation.Softmax import Softmax
 
 
 def transform_numbers(input, size):
@@ -34,8 +35,8 @@ def test_dim_conv():
 if __name__ == '__main__':
     test_dim_conv()
     # Get the data
-    uspsdatatrain = "../data/USPS_train.txt"
-    uspsdatatest = "../data/USPS_test.txt"
+    uspsdatatrain = "data/USPS_train.txt"
+    uspsdatatest = "data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     alltrainy_proba = transform_numbers(alltrainy, np.unique(alltrainy).shape[0])
@@ -46,7 +47,7 @@ if __name__ == '__main__':
     # Network parameters
     gradient_step = 1e-3
     iterations = 100
-    batch_size = 25;
+    batch_size = 25
     kernel_size = 3
     chan_input = 1
     chan_output = 32
@@ -67,4 +68,8 @@ if __name__ == '__main__':
 
     # Train networks
     opt = Optim(net=net, loss=sftmax, eps=gradient_step)
-    opt.SGD(alltrainx, alltrainy_proba, batch_size, maxiter=iterations, verbose=False)
+    opt.SGD(alltrainx, alltrainy_proba, batch_size, maxiter=iterations, verbose=True)
+    
+    predict = Softmax().forward(opt.predict(alltestx))
+    y_hat = np.argmax(predict,axis=1)
+    print("precision:" ,sum(y_hat == alltesty)/len(alltesty))
