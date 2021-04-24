@@ -3,6 +3,7 @@ from src.Module.module import Module
 
 class Flatten(Module):
     def __init__(self, length, chan_in):
+        super().__init__()
         self._chan_in = chan_in
         self._length = length
 
