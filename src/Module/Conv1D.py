@@ -52,9 +52,6 @@ class Conv1D(Module):
             self._gradient += np.dot(input[i,:].T,delta[:, i, :]).reshape(self._gradient.shape)
             
     
-    def backward_delta_2(self, input, delta):
-        pass
-    
     def backward_delta(self, input, delta):
         z = zip(range(0, input.shape[1], 1+ self._stride), \
         range(self._k_size, input.shape[1], 1+self._stride))

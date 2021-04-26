@@ -5,16 +5,9 @@ Faire des tests sur les dimensions des fonctions, rapide juste un assert pour Ã
 '''
 import numpy as np
 
-from src.Activation.ReLU import ReLU
-from src.Loss.CESoftMax import CESoftMax
 from src.Module.Conv1D import Conv1D
-from src.Module.Linear import Linear
-from src.Module.flatten import Flatten
-from src.Module.sequential import Sequential
-from src.Optim.Optim import Optim
 from src.Pooling.maxPool1D import MaxPool1D
-from src.utils.utils import load_usps
-from src.Activation.Softmax import Softmax
+
 
 
 def transform_numbers(input, size):
@@ -30,10 +23,14 @@ def transform_numbers(input, size):
 if __name__ == '__main__':
     batch_size = 25
     kernel_size = 3
-    chan_input = 1
+    chan_input = 2
     chan_output = 32
     stride = 2
     length = 128
+    
+    i = 2 # pixel de test
+    image = 0 # image de test
+    filtre = 1 # filtre de test
     
     """
         Convolution
@@ -44,10 +41,6 @@ if __name__ == '__main__':
     # forward size
     forward_conv = convolution.forward(X)
     assert forward_conv.shape == (batch_size, (length-kernel_size)//stride +1,chan_output)
-    
-    i = 2 # pixel de test
-    image = 0 # image de test
-    filtre = 1 # filtre de test
     
     # operateur forward result
     res = convolution.operateur(X,i*stride)[image][filtre]
@@ -72,3 +65,33 @@ if __name__ == '__main__':
     excepted = np.sum(convolution._parameters[:,:,filtre])
     assert np.abs(excepted - res) < 1e-5
     """
+    
+    """
+        MaxPool1D
+    """
+    max_pool = MaxPool1D(kernel_size,stride)
+    
+    # forward size
+    forward_pool = max_pool.forward(X)
+    assert forward_pool.shape == (batch_size, (length-kernel_size)//stride +1,chan_input)
+    
+    # forward result
+    res = forward_pool[image][i]
+    excepted = np.max(X[image,i*stride:i*stride+kernel_size],axis=0).flatten()
+    assert np.max(np.abs(res - excepted)) < 1e-5
+    
+    # backward_delta size
+    delta = np.random.rand(forward_pool.shape[0],forward_pool.shape[1],forward_pool.shape[2])
+    backward_pool = max_pool.backward_delta(X, delta)
+    assert backward_pool.shape == (batch_size,length,chan_input)
+    
+    # backward_delta result
+    
+    res = backward_pool[image]
+    
+    excepted = np.zeros(res.shape)
+    for i,x in enumerate(range(0,X.shape[1]-stride,stride)):
+        maximum = np.argmax(X[image,x:x+kernel_size],axis=0) + x
+        excepted[maximum,range(X.shape[2])] = delta[image,i]
+
+    assert np.max(np.abs(res-excepted)) < 1e-5
