@@ -28,42 +28,47 @@ def transform_numbers(input, size):
     return datay_r
 
 if __name__ == '__main__':
-    # Get the data
-    uspsdatatrain = "data/USPS_train.txt"
-    uspsdatatest = "data/USPS_test.txt"
-    alltrainx, alltrainy = load_usps(uspsdatatrain)
-    alltestx, alltesty = load_usps(uspsdatatest)
-    alltrainy_proba = transform_numbers(alltrainy, np.unique(alltrainy).shape[0])
-    alltrainx = alltrainx.reshape((alltrainx.shape[0], alltrainx.shape[1], 1))
-    alltestx = alltestx.reshape((alltestx.shape[0], alltestx.shape[1], 1))
-    # Get data values
-    length = alltrainx.shape[1]
-    # Network parameters
-    gradient_step = 1e-3
-    iterations = 100
     batch_size = 25
     kernel_size = 3
     chan_input = 1
     chan_output = 32
-    stride = 1
-    max_pool_stride = 2
-    max_pool_kernel = 2
-    # loss function
-    sftmax = CESoftMax()
-
-    # Network parameters
-    net = Sequential([Conv1D(kernel_size, chan_input, chan_output, stride=stride),
-                      MaxPool1D(max_pool_kernel, max_pool_stride),
-                      Flatten(((length - kernel_size) // stride + 1) // max_pool_stride, chan_output),
-                      Linear(4064, 100),
-                      ReLU(),
-                      Linear(100, 10)
-                      ])
-
-    # Train networks
-    opt = Optim(net=net, loss=sftmax, eps=gradient_step)
-    opt.SGD(alltrainx, alltrainy_proba, batch_size, maxiter=iterations, verbose=True)
+    stride = 2
+    length = 128
     
-    predict = Softmax().forward(opt.predict(alltestx))
-    y_hat = np.argmax(predict,axis=1)
-    print("precision:" ,sum(y_hat == alltesty)/len(alltesty))
+    """
+        Convolution
+    """
+    X = np.random.rand(batch_size,length,chan_input)
+    convolution = Conv1D(kernel_size, chan_input, chan_output, stride=stride)
+    
+    # forward size
+    forward_conv = convolution.forward(X)
+    assert forward_conv.shape == (batch_size, (length-kernel_size)//stride +1,chan_output)
+    
+    i = 2 # pixel de test
+    image = 0 # image de test
+    filtre = 1 # filtre de test
+    
+    # operateur forward result
+    res = convolution.operateur(X,i*stride)[image][filtre]
+    w = convolution._parameters[:,:,filtre]
+    excepted = np.sum(w*X[image,i*stride:i*stride+kernel_size])   
+    assert np.abs(excepted - res) < 1e-5
+    
+    # forward result
+    res = forward_conv[image][i][filtre]
+    assert np.abs(res - excepted) < 1e-5
+    
+    
+    # backward size
+    delta = np.random.rand(forward_conv.shape[0],forward_conv.shape[1],forward_conv.shape[2])
+    backward_conv = convolution.backward_delta(X, delta)
+    assert backward_conv.shape == (batch_size,length,chan_input)
+    
+    """
+    # backward_delta result
+    res = convolution.backward_delta(X,delta)#[image][filtre]
+    print(res.shape)
+    excepted = np.sum(convolution._parameters[:,:,filtre])
+    assert np.abs(excepted - res) < 1e-5
+    """

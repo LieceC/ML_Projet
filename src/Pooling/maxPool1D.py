@@ -8,6 +8,7 @@ class MaxPool1D(Module):
         super().__init__()
         self._k_size = k_size
         self._stride = stride
+        
 
     def forward(self, X):
         size = ((X.shape[1] - self._k_size) // self._stride) + 1
@@ -28,6 +29,7 @@ class MaxPool1D(Module):
             for x in range(input.shape[0]):
                 array_pool[x, coord[x], f] = delta[x, :, f]
         return array_pool
+    
 
     '''
     def backward_delta(self, input, delta):
