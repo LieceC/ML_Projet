@@ -50,11 +50,11 @@ def test_multiclass():
     m_linear2 = Linear(arbitrary_neural, output_size)
     m_act2 = Softmax()
     m_loss = CESoftMax()
-
-    seq = Sequential([m_linear, m_act1, m_linear2])
-
-    opt = Optim(seq, loss=m_loss, eps=gradient_step)
-    opt.SGD(alltrainx, alltrainy_proba, batch_size, maxiter=iteration, verbose=True)
+    
+    seq = Sequential([m_linear,m_act1,m_linear2])
+    
+    opt = Optim(seq,loss=m_loss,eps = gradient_step)
+    opt.SGD(alltrainx,alltrainy_proba,batch_size, maxiter=iteration,verbose = 2)
 
     predict = m_act2.forward(opt.predict(alltestx))
     predict = np.argmax(predict, axis=1)

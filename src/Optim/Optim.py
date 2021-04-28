@@ -1,8 +1,8 @@
 import numpy as np
-
 from src.Loss.MSELoss import MSELoss
 from src.utils.utils import unison_shuffled_copies, chunks
-
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 class Optim(object):
     """
@@ -31,18 +31,39 @@ class Optim(object):
 
     def SGD(self, X, Y, batch_size, maxiter=10, verbose=False):
         assert len(X) == len(Y)
+        losss = []
         for i in range(maxiter):
             datax_rand, datay_rand = unison_shuffled_copies(X, Y)
             datax_rand_batch, datay_rand_batch = list(chunks(datax_rand, batch_size)), list(
                 chunks(datay_rand, batch_size))
             nb_batchs = len(datax_rand_batch)
-            losss = np.zeros(nb_batchs)
+            loss_batch = np.zeros(nb_batchs)
             for j in range(nb_batchs):
-                losss[j] = self.step(datax_rand_batch[j], datay_rand_batch[j]).mean()
-            if verbose == 1:
-                print("iteration " + str(i) + ":")
+                loss_batch[j] = self.step(datax_rand_batch[j], datay_rand_batch[j]).mean()
+                losss += [loss_batch[j]]
+            if verbose >= 1: 
+                print("iteration "+str(i)+":")
                 print("Loss")
-                print("mean - " + str(losss.mean()) + "\nstd - " + str(losss.std()))
+                print("mean - "+str(loss_batch.mean()) + "\nstd - "+str(loss_batch.std())) 
+        if verbose == 2:
+            patches = [mpatches.Patch(color='red', label = 'variance sur iterations'),
+                       mpatches.Patch(color='green', label = 'moyenne sur iterations'),
+                       mpatches.Patch(color='blue', label = 'evolution sur les batchs')
+                       ]
+            losss = np.array(losss)
+            x = np.arange(1/nb_batchs,maxiter+1/nb_batchs,1/nb_batchs)
+            plt.plot(x,losss,color="blue")
+            plt.title("Evolution de la loss en fonction du nombre d'itérations")
+            plt.legend(handles=patches[-1:])
+            plt.show()
+            
+            x = np.arange(1,maxiter+1/nb_batchs,1)
+            losss_2 = losss.reshape(-1,nb_batchs)
+            plt.plot(x,losss_2.mean(axis=1),color='green')
+            plt.plot(x,losss_2.std(axis=1),color='red')
+            plt.title("Evolution de la loss en fonction du nombre d'itérations")
+            plt.legend(handles=patches[:-1])
+            plt.show()
 
     def predict(self, X):
         return self._net.forward(X)[-1]
