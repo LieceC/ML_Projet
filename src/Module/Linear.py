@@ -22,11 +22,9 @@ class Linear(Module):
     def backward_update_gradient(self, input, delta):
         self._gradient += np.dot(input.T, delta)
         if self._bias:
-            # print(np.sum(delta, axis = 0))
             self._bias_gradient += np.sum(delta, axis=0)
 
     def update_parameters(self, gradient_step=1e-3):
-        ## Calcule la mise a jour des parametres selon le gradient calcule et le pas de gradient_step
         self._parameters -= gradient_step * self._gradient
         if self._bias:
             self._bias_parameters -= gradient_step * self._bias_gradient

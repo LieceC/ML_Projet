@@ -1,20 +1,17 @@
 '''
 Faire des tests sur les dimensions des fonctions, rapide juste un assert pour Ãªtre sur
 '''
+import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics as skt
 
 from src.Activation.Softmax import Softmax
 from src.Activation.sigmoid import Sigmoid
-from src.Activation.tanH import TanH
-from src.Loss.BCE import BCE
-from src.Loss.MSELoss import MSELoss
 from src.Loss.CESoftMax import CESoftMax
 from src.Module.Linear import Linear
-from src.utils.utils import load_usps
 from src.Module.sequential import Sequential
 from src.Optim.Optim import Optim
-import matplotlib.pyplot as plt 
+from src.utils.utils import load_usps
 
 
 def transform_numbers(input, size):
@@ -46,25 +43,26 @@ def test_multiclass():
     iteration = 100
     gradient_step = 1e-3
     arbitrary_neural = 128
-    batch_size = 100 # len(alltrainx)
-    
+    batch_size = 100  # len(alltrainx)
+
     m_linear = Linear(input_size, arbitrary_neural)
     m_act1 = Sigmoid()
     m_linear2 = Linear(arbitrary_neural, output_size)
     m_act2 = Softmax()
     m_loss = CESoftMax()
-    
-    seq = Sequential([m_linear,m_act1,m_linear2])
-    
-    opt = Optim(seq,loss=m_loss,eps = gradient_step)
-    opt.SGD(alltrainx,alltrainy_proba,batch_size, maxiter=iteration,verbose = True)
+
+    seq = Sequential([m_linear, m_act1, m_linear2])
+
+    opt = Optim(seq, loss=m_loss, eps=gradient_step)
+    opt.SGD(alltrainx, alltrainy_proba, batch_size, maxiter=iteration, verbose=True)
 
     predict = m_act2.forward(opt.predict(alltestx))
     predict = np.argmax(predict, axis=1)
 
     res = skt.confusion_matrix(predict, alltesty)
-    print(np.sum(np.where(predict==alltesty,1,0))/len(predict))
+    print(np.sum(np.where(predict == alltesty, 1, 0)) / len(predict))
     plt.imshow(res)
+
 
 if __name__ == '__main__':
     test_multiclass()

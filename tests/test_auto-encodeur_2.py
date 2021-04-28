@@ -53,7 +53,6 @@ def cluster(comp_train, comp_test, alltrainy, alltesty):
 
     plt.imshow(only_argmax)
     plt.show()
-    plt.show()
 
     puretes = []
     for x in range(10):

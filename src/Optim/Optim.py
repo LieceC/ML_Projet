@@ -1,6 +1,8 @@
+import numpy as np
+
 from src.Loss.MSELoss import MSELoss
 from src.utils.utils import unison_shuffled_copies, chunks
-import numpy as np
+
 
 class Optim(object):
     """
@@ -16,7 +18,7 @@ class Optim(object):
     def step(self, batch_x, batch_y):
         # Forward step
         forward = self._net.forward(batch_x)
-        loss = self._loss.forward(batch_y,forward[-1])
+        loss = self._loss.forward(batch_y, forward[-1])
 
         # Backward step
         backward_loss = self._loss.backward(batch_y, forward[-1])
@@ -27,7 +29,7 @@ class Optim(object):
         self._net.zero_grad()
         return loss
 
-    def SGD(self, X, Y, batch_size, maxiter=10, verbose = False):
+    def SGD(self, X, Y, batch_size, maxiter=10, verbose=False):
         assert len(X) == len(Y)
         for i in range(maxiter):
             datax_rand, datay_rand = unison_shuffled_copies(X, Y)
@@ -37,10 +39,10 @@ class Optim(object):
             losss = np.zeros(nb_batchs)
             for j in range(nb_batchs):
                 losss[j] = self.step(datax_rand_batch[j], datay_rand_batch[j]).mean()
-            if verbose == 1: 
-                print("iteration "+str(i)+":")
+            if verbose == 1:
+                print("iteration " + str(i) + ":")
                 print("Loss")
-                print("mean - "+str(losss.mean()) + "\nstd - "+str(losss.std())) 
-                
+                print("mean - " + str(losss.mean()) + "\nstd - " + str(losss.std()))
+
     def predict(self, X):
         return self._net.forward(X)[-1]

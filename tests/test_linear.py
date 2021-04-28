@@ -11,7 +11,8 @@ def test_linear():
     coef1 = 1002
     coef2 = 13
     bias = 4
-    # fonction linéair que l'on apprend
+
+    # fonction linéaire que l'on apprend
     def f(x1, x2):
         return x1 * coef1 + coef2 * x2 + bias
 
@@ -26,7 +27,7 @@ def test_linear():
     x1 = x1.reshape((-1, 1))
     x2 = x2.reshape((-1, 1))
     datay = f_bruit(x1, x2)
-    
+
     datax = np.concatenate((x1, x2), axis=1)
     # Input and Output size of our NN
     input_size = len(datax[0])
@@ -39,20 +40,12 @@ def test_linear():
     m_linear = Linear(input_size, output_size)
 
     for _ in range(iteration):
-        # Etape forward
         hidden_l = m_linear.forward(datax)
         loss = m_mse.forward(datay, hidden_l)
         print("max loss:", np.max(loss))
-        # print("parameters",m_linear._parameters)
-        # Etape Backward
-
         loss_back = m_mse.backward(datay, hidden_l)
-        # print(loss_back)
-        # print(m_linear._parameters)
-        delta_linear = m_linear.backward_delta(datax, loss_back)
 
         m_linear.backward_update_gradient(datax, loss_back)
-        # print("gradient",m_linear._gradient)
         m_linear.update_parameters(gradient_step=gradient_step)
         m_linear.zero_grad()
 
@@ -70,5 +63,10 @@ def test_linear():
     print("valeurs voulues:", str([bias]))
 
 
+def test_linear_SGD():
+    pass
+
+
 if __name__ == '__main__':
     test_linear()
+    test_linear_SGD()

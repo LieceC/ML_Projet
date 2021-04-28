@@ -8,8 +8,7 @@ from src.Activation.sigmoid import Sigmoid
 from src.Loss.MSELoss import MSELoss
 from src.Module.Linear import Linear
 
-
-def test_dim_linear():
+if __name__ == '__main__':
     # generation of tests data
     datax, datay = tools.gen_arti(centerx=1, centery=1, sigma=0.1, nbex=1000, data_type=0, epsilon=0.1)
     datay_r = np.zeros((len(datay), 2))
@@ -42,7 +41,3 @@ def test_dim_linear():
     delta_linear = m_linear.backward_delta(datax, delta_funcact)
     # sortie de taille (nb entr�es, nombre de donn�es)
     assert (delta_linear.shape == (len(datax), input_size))
-
-
-if __name__ == '__main__':
-    test_dim_linear()

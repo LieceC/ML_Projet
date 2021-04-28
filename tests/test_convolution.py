@@ -6,6 +6,7 @@ Faire des tests sur les dimensions des fonctions, rapide juste un assert pour Ã
 import numpy as np
 
 from src.Activation.ReLU import ReLU
+from src.Activation.leakyReLU import LeakyReLU
 from src.Loss.CESoftMax import CESoftMax
 from src.Module.Conv1D import Conv1D
 from src.Module.Linear import Linear
@@ -27,10 +28,12 @@ def transform_numbers(input, size):
         datay_r[x][input[x]] = 1
     return datay_r
 
+
+
 if __name__ == '__main__':
     # Get the data
-    uspsdatatrain = "data/USPS_train.txt"
-    uspsdatatest = "data/USPS_test.txt"
+    uspsdatatrain = "../data/USPS_train.txt"
+    uspsdatatest = "../data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     alltrainy_proba = transform_numbers(alltrainy, np.unique(alltrainy).shape[0])
@@ -40,8 +43,8 @@ if __name__ == '__main__':
     length = alltrainx.shape[1]
     # Network parameters
     gradient_step = 1e-5
-    iterations = 10
-    batch_size = 20
+    iterations = 1000
+    batch_size = 100
     kernel_size = 3
     chan_input = 1
     chan_output = 32

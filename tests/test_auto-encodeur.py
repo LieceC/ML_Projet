@@ -64,8 +64,8 @@ def cluster(comp_train, comp_test, alltrainy, alltesty):
 
 
 def test_auto_encodeur():
-    uspsdatatrain = "data/USPS_train.txt"
-    uspsdatatest = "data/USPS_test.txt"
+    uspsdatatrain = "../data/USPS_train.txt"
+    uspsdatatest = "../data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     alltrainx /= 2
@@ -74,7 +74,7 @@ def test_auto_encodeur():
     # Initialize modules with respective size
     iteration = 100
     gradient_step = 1e-3
-    batch_size = 10  # len(alltrainx)
+    batch_size = 1000  # len(alltrainx)
 
     input_size = alltrainx.shape[1]
     hidden_size = 100
