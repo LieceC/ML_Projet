@@ -14,20 +14,8 @@ from src.Module.flatten import Flatten
 from src.Module.sequential import Sequential
 from src.Optim.Optim import Optim
 from src.Pooling.maxPool1D import MaxPool1D
-from src.utils.utils import load_usps
+from src.utils.utils import load_usps, transform_numbers
 from src.Activation.Softmax import Softmax
-
-
-def transform_numbers(input, size):
-    """Assume 1D array as input, len is the number of example
-    Transform into proba
-    """
-    datay_r = np.zeros((len(input), size))
-    # Re-arranging data to compute a probability
-    for x in range(len(input)):
-        datay_r[x][input[x]] = 1
-    return datay_r
-
 
 
 if __name__ == '__main__':

@@ -9,17 +9,6 @@ from src.Module.Conv1D import Conv1D
 from src.Pooling.maxPool1D import MaxPool1D
 
 
-def transform_numbers(input, size):
-    """Assume 1D array as input, len is the number of example
-    Transform into proba
-    """
-    datay_r = np.zeros((len(input), size))
-    # Re-arranging data to compute a probability
-    for x in range(len(input)):
-        datay_r[x][input[x]] = 1
-    return datay_r
-
-
 if __name__ == '__main__':
     batch_size = 25
     kernel_size = 4

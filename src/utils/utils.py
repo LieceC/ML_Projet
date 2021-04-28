@@ -43,3 +43,13 @@ def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
+
+
+def transform_numbers(input, size):
+    """Assume 1D array as input, len is the number of example
+    Transform into proba
+    """
+    datay_r = np.zeros((len(input), size))
+    # Re-arranging data to compute a probability
+    datay_r[np.arange(len(input)), input] = 1
+    return datay_r

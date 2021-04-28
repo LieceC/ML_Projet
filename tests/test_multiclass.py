@@ -12,17 +12,6 @@ from src.Module.Linear import Linear
 from src.utils.utils import load_usps
 
 
-def transform_numbers(input, size):
-    """Assume 1D array as input, len is the number of example
-    Transform into proba
-    """
-    datay_r = np.zeros((len(input), size))
-    # Re-arranging data to compute a probability
-    for x in range(len(input)):
-        datay_r[x][input[x]] = 1
-    return datay_r
-
-
 def test_multiclass():
     """
     testx, testy = get_usps([neg, pos], alltestx, alltesty)
@@ -98,10 +87,6 @@ def test_multiclass():
     res = skt.confusion_matrix(predict, alltesty)
     print(np.sum(np.where(predict == alltesty, 1, 0)) / len(predict))
     plt.imshow(res)
-
-
-def test_multiclass_SGD():
-    pass
 
 
 if __name__ == '__main__':
