@@ -56,7 +56,7 @@ if __name__ == '__main__':
     # Network parameters
     net = Sequential([Conv1D(kernel_size, chan_input, chan_output, stride=stride),
                       MaxPool1D(max_pool_kernel, max_pool_stride),
-                      Flatten(((length - kernel_size) // stride + 1) // max_pool_stride, chan_output),
+                      Flatten(),
                       Linear(4064, 100),
                       ReLU(),
                       Linear(100, 10)

@@ -22,13 +22,13 @@ def transform_numbers(input, size):
 
 if __name__ == '__main__':
     batch_size = 25
-    kernel_size = 3
+    kernel_size = 4
     chan_input = 2
     chan_output = 32
     stride = 2
     length = 128
     
-    i = 2 # pixel de test
+    i = 4 # pixel de test
     image = 0 # image de test
     filtre = 1 # filtre de test
     
@@ -58,14 +58,21 @@ if __name__ == '__main__':
     backward_conv = convolution.backward_delta(X, delta)
     assert backward_conv.shape == (batch_size,length,chan_input)
     
-    """
-    # backward_delta result
-    res = convolution.backward_delta(X,delta)#[image][filtre]
-    print(res.shape)
-    excepted = np.sum(convolution._parameters[:,:,filtre])
-    assert np.abs(excepted - res) < 1e-5
-    """
     
+    # backward_delta result
+    res = backward_conv[image][i][filtre]
+    # verification du reshape des parametres
+    params = convolution._parameters.reshape(-1, convolution._chan_out).T
+    (a,b) = (2,1)
+    assert params[filtre,a*chan_input+b] == convolution._parameters[a,b,filtre]
+    # verfication du resultat
+    excepted = 0
+    for j in range(0, X.shape[1], stride + 1):
+        cur = j//(stride + 1)
+        if j + kernel_size > i and j <= i: 
+            excepted += np.dot(delta[:,cur,:],params)[image][(i-j)*chan_input:][filtre]
+    assert np.max(np.abs(excepted - res)) < 1e-5
+
     """
         MaxPool1D
     """
@@ -93,5 +100,5 @@ if __name__ == '__main__':
     for i,x in enumerate(range(0,X.shape[1]-stride,stride)):
         maximum = np.argmax(X[image,x:x+kernel_size],axis=0) + x
         excepted[maximum,range(X.shape[2])] = delta[image,i]
-
+    assert stride <= kernel_size
     assert np.max(np.abs(res-excepted)) < 1e-5
