@@ -30,9 +30,9 @@ if __name__ == '__main__':
     # Get data values
     length = alltrainx.shape[1]
     # Network parameters
-    gradient_step = 1e-5
+    gradient_step = 1e-3
     iterations = 1000
-    batch_size = 100
+    batch_size = 50
     kernel_size = 3
     chan_input = 1
     chan_output = 32

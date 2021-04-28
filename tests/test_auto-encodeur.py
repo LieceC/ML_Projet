@@ -15,7 +15,19 @@ from src.Module.sequential import Sequential
 from src.Optim.Optim import Optim
 from src.utils.utils import load_usps
 
-
+def plot_2D(alltesty, compression):
+    """
+    alltesty : y des données de test
+    compression : compression des données de test
+    """
+    colors = ["red", "green", "blue", "yellow", "brown", "orange", "black", "cyan", "violet", "pink"]
+    patches = [mpatches.Patch(color=colors[i], label=str(i)) for i in range(len(colors))]
+    plt.legend(handles=patches)
+    for nb in range(10):
+        data = np.where(alltesty==nb)
+        plt.scatter(compression[:,0][data],compression[:,1][data],color = colors[nb])
+    plt.show()
+    
 def TNSE(alltesty, compression):
     """
     alltesty : y des données de test
@@ -64,21 +76,25 @@ def cluster(comp_train, comp_test, alltrainy, alltesty):
 
 
 def test_auto_encodeur():
-    uspsdatatrain = "../data/USPS_train.txt"
-    uspsdatatest = "../data/USPS_test.txt"
+    
+    uspsdatatrain = "data/USPS_train.txt"
+    uspsdatatest = "data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     alltrainx /= 2
     alltestx /= 2
+    
+    TNSE(alltesty,alltestx)
+    return
 
     # Initialize modules with respective size
     iteration = 100
     gradient_step = 1e-3
-    batch_size = 1000  # len(alltrainx)
+    batch_size = 50  # len(alltrainx)
 
     input_size = alltrainx.shape[1]
     hidden_size = 100
-    compression_size = 10
+    compression_size = 2
 
     m_linear = Linear(input_size, hidden_size)
     m_tanh = TanH()
@@ -97,24 +113,30 @@ def test_auto_encodeur():
     seq = Sequential([m_linear, m_tanh, m_linear2, m_tanh, m_linear3, m_tanh, m_linear4, m_sigmoid])
 
     opt = Optim(seq, loss=m_loss, eps=gradient_step)
-    opt.SGD(alltrainx, alltrainx, batch_size, maxiter=iteration, verbose=True)
+    opt.SGD(alltrainx, alltrainx, batch_size, maxiter=iteration, verbose=2)
 
-    # predict = opt.predict(alltestx)
-
-    '''
+    predict = opt.predict(alltestx)
+    compression_train = seq.forward(alltrainx)[-5]
+    compression = seq.forward(alltestx)[-5]
+    
+        
+    
+    """
     # print 
     for i in range(6):
         plt.imshow(alltestx[i].reshape((16,16)))
         plt.show()
         plt.imshow(predict[i].reshape((16,16)))
         plt.show()
-    '''
-    compression_train = seq.forward(alltrainx)[-5]
-    compression = seq.forward(alltestx)[-5]
-
-    # TNSE(alltesty,compression)
-    return cluster(compression_train, compression, alltrainy, alltesty)
-
+        plt.imshow(compression[i].reshape((compression_size,1)))
+        plt.show()
+    """
+    # if compression_size == 2:
+    #    plot_2D(alltesty, compression)
+    
+    TNSE(alltesty,alltestx)
+    # return cluster(compression_train, compression, alltrainy, alltesty)
+    
 
 if __name__ == '__main__':
     test = test_auto_encodeur()

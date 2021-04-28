@@ -99,7 +99,9 @@ def test_auto_encodeur():
     opt.SGD(alltrainx, alltrainx, batch_size, maxiter=iteration, verbose=True)
 
     predict = opt.predict(alltestx)
-
+    compression_train = seq.forward(alltrainx)[-5]
+    compression = seq.forward(alltestx)[-5]
+    
     # print
     size = int(np.sqrt(alltestx.shape[1]))
     for i in range(6):
@@ -107,9 +109,10 @@ def test_auto_encodeur():
         plt.show()
         plt.imshow(predict[i].reshape((size, size)))
         plt.show()
+        plt.imshow(compression[i])
+        plt.show()
 
-    compression_train = seq.forward(alltrainx)[-5]
-    compression = seq.forward(alltestx)[-5]
+    
 
     # TNSE(alltesty,compression)
     return cluster(compression_train, compression, alltrainy, alltesty)
