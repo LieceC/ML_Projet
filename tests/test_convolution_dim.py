@@ -30,7 +30,7 @@ if __name__ == '__main__':
     # forward size
     forward_conv = convolution.forward(X)
     assert forward_conv.shape == (batch_size, (length - kernel_size) // stride + 1, chan_output)
-
+    
     # operateur forward result
     res = convolution.operateur(X, i * stride)[image][filtre]
     w = convolution._parameters[:, :, filtre]
@@ -54,12 +54,12 @@ if __name__ == '__main__':
     assert params[filtre, a * chan_input + b] == convolution._parameters[a, b, filtre]
     # verfication du resultat
     excepted = 0
-    for j in range(0, X.shape[1], stride + 1):
-        cur = j // (stride + 1)
+    for j in range(0, X.shape[1], stride):
+        cur = j // stride
         if j + kernel_size > i and j <= i:
             excepted += np.dot(delta[:, cur, :], params)[image][(i - j) * chan_input:][filtre]
     assert np.max(np.abs(excepted - res)) < 1e-5
-
+    convolution.backward_update_gradient(X, delta)
     """
         MaxPool1D
     """
