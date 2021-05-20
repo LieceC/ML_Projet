@@ -29,18 +29,56 @@ class Optim(object):
         self._net.zero_grad()
         return loss
 
-    def SGD(self, X, Y, batch_size, maxiter=10, verbose=False):
+    def SGD(self, X, Y, batch_size, X_val = None, Y_val = None, f_val = lambda x : x, maxiter=10, verbose=False):
+        """
+    
+            Parameters
+            ----------
+            X : 
+                Données d'apprentissage.
+            Y : 
+                Labels d'apprentissage.
+            batch_size : 
+                Taille des batchs pour l'apprentissage.
+            X_val : TYPE, optional
+                Données de validation. The default is None.
+            Y_val : TYPE, optional
+                Labels de validation. The default is None.
+            f_val : TYPE, optional
+                Fonction à appliquer aux labels predits pour correspondre aux labels des données de validation. 
+                The default is lambda x : x.
+            maxiter : TYPE, optional
+                Nombre d'itération d'apprentissage. The default is 10.
+            verbose : TYPE, optional
+                Parametre de verbosité.
+                1 => affiche loss chaque itération
+                2 => affiche la courbe de l'évolution de la loss en fonction du nombre d'itérations
+                The default is False.
+            Returns
+            -------
+            None.
+
+        """
         assert len(X) == len(Y)
+        assert X_val is None or (Y_val is not None and len(X_val) == len(Y_val))
         losss = []
+        precision_val = []
+        recall_val = []
         for i in range(maxiter):
             datax_rand, datay_rand = unison_shuffled_copies(X, Y)
             datax_rand_batch, datay_rand_batch = list(chunks(datax_rand, batch_size)), list(
                 chunks(datay_rand, batch_size))
             nb_batchs = len(datax_rand_batch)
             loss_batch = np.zeros(nb_batchs)
+
             for j in range(nb_batchs):
                 loss_batch[j] = self.step(datax_rand_batch[j], datay_rand_batch[j]).mean()
                 losss += [loss_batch[j]]
+            if X_val is not None: # calcul validation
+                predict = self.predict(X_val)
+                y_hat = np.argmax(predict,axis=1)
+                precision_val += [sum(y_hat == Y_val)/len(Y_val)]
+                
             if verbose >= 1: 
                 print("iteration "+str(i)+":")
                 print("Loss")
@@ -63,6 +101,11 @@ class Optim(object):
             plt.plot(x,losss_2.std(axis=1),color='red')
             plt.title("Evolution de la loss en fonction du nombre d'itérations")
             plt.legend(handles=patches[:-1])
+            plt.show()
+        if X_val is not None:
+            x = np.arange(1,maxiter+1)
+            plt.plot(x,precision_val,color="blue")
+            plt.title("Evolution de la précision en fonction du nombre d'itérations")
             plt.show()
 
     def predict(self, X):

@@ -24,15 +24,20 @@ def test_multiclass():
     uspsdatatest = "data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
+    validation_size = 500
+    allvalx = alltestx[:validation_size]
+    allvaly = alltesty[:validation_size]
+    alltestx = alltestx[validation_size:]
+    alltesty = alltesty[validation_size:]
     input_size = len(alltrainx[0])
     output_size = len(np.unique(alltesty))
     alltrainy_proba = transform_numbers(alltrainy, output_size)
-
+    
     # Initialize modules with respective size
-    iteration = 100
+    iteration = 1000
     gradient_step = 1e-3
     arbitrary_neural = 128
-    batch_size = 100  # len(alltrainx)
+    batch_size = 25  # len(alltrainx)
 
     m_linear = Linear(input_size, arbitrary_neural)
     m_act1 = Sigmoid()
@@ -43,7 +48,7 @@ def test_multiclass():
     seq = Sequential([m_linear,m_act1,m_linear2])
     
     opt = Optim(seq,loss=m_loss,eps = gradient_step)
-    opt.SGD(alltrainx,alltrainy_proba,batch_size, maxiter=iteration,verbose = 2)
+    opt.SGD(alltrainx,alltrainy_proba,batch_size, X_val=allvalx,Y_val=allvaly,f_val=lambda x: np.argmax(x,axis=1), maxiter=iteration,verbose = 2)
 
     predict = m_act2.forward(opt.predict(alltestx))
     predict = np.argmax(predict, axis=1)

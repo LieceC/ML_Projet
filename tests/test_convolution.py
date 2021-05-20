@@ -20,19 +20,26 @@ from src.Activation.Softmax import Softmax
 
 if __name__ == '__main__':
     # Get the data
-    uspsdatatrain = "../data/USPS_train.txt"
-    uspsdatatest = "../data/USPS_test.txt"
+    uspsdatatrain = "data/USPS_train.txt"
+    uspsdatatest = "data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     alltrainy_proba = transform_numbers(alltrainy, np.unique(alltrainy).shape[0])
     alltrainx = alltrainx.reshape((alltrainx.shape[0], alltrainx.shape[1], 1))
     alltestx = alltestx.reshape((alltestx.shape[0], alltestx.shape[1], 1))
+    validation_size = 500
+    allvalx = alltestx[:validation_size]
+    allvaly = alltesty[:validation_size]
+    alltestx = alltestx[validation_size:]
+    alltesty = alltesty[validation_size:]
+    
+    
     # Get data values
     length = alltrainx.shape[1]
     # Network parameters
     gradient_step = 1e-3
     iterations = 1000
-    batch_size = 50
+    batch_size = 25
     kernel_size = 3
     chan_input = 1
     chan_output = 32
@@ -55,7 +62,7 @@ if __name__ == '__main__':
 
     # Train networks
     opt = Optim(net=net, loss=sftmax, eps=gradient_step)
-    opt.SGD(alltrainx, alltrainy_proba, batch_size, maxiter=iterations, verbose=True)
+    opt.SGD(alltrainx, alltrainy_proba, batch_size,X_val = allvalx, Y_val = allvaly, f_val = lambda x : np.argmax(Softmax().forward(x),axis=1), maxiter=iterations, verbose=2)
     
     predict = Softmax().forward(opt.predict(alltestx))
     y_hat = np.argmax(predict,axis=1)
