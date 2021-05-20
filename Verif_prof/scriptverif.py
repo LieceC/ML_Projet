@@ -51,8 +51,8 @@ delta_relu = relu.backward_delta(res_lin, delta_mse)
 soft_lin = softmax.forward(res_lin)
 res_bce = bce.forward((datay > 0).astype(float).reshape(-1, 1), soft_lin)
 delta_bce = bce.backward((datay > 0).astype(float).reshape(-1, 1), soft_lin)
-res_ce = crossentr.forward(dataymulti, datax)
-delta_ce = crossentr.backward(dataymulti, datax)
+# res_ce = crossentr.forward(datax, dataymulti)
+# delta_ce = crossentr.backward(datax, dataymulti)
 
 ## Convolutions
 linear.zero_grad()
@@ -73,7 +73,7 @@ grad_conv = conv1D._gradient
 np.savez_compressed("verif_projet.npz", res_lin=res_lin, res_mse=res_mse, delta_mse=delta_mse, grad_lin=grad_lin,
                     delta_lin=delta_lin, res_tanh=res_tanh, delta_tanh=delta_tanh, res_sig=res_sig, delta_sig=delta_sig,
                     res_relu=res_relu, delta_relu=delta_relu, soft_lin=soft_lin, res_bce=res_bce, delta_bce=delta_bce,
-                    res_ce=res_ce, delta_ce=delta_ce, res_conv=res_conv, res_pool=res_pool, res_flat=res_flat,
+                    res_conv=res_conv, res_pool=res_pool, res_flat=res_flat,
                     res_linconv=res_linconv, res_mseconv=res_mseconv, delta_mseconv=delta_mseconv,
                     delta_linconv=delta_linconv, delta_flat=delta_flat, delta_pool=delta_pool, delta_conv=delta_conv,
                     grad_conv=grad_conv)
