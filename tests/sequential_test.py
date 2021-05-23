@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics as skt
 
-from src.Activation.softmax import Softmax
 from src.Activation.sigmoid import Sigmoid
+from src.Activation.softmax import Softmax
 from src.Loss.CESoftMax import CESoftMax
 from src.Module.linear import Linear
 from src.Module.sequential import Sequential
@@ -32,7 +32,7 @@ def test_multiclass():
     input_size = len(alltrainx[0])
     output_size = len(np.unique(alltesty))
     alltrainy_proba = transform_numbers(alltrainy, output_size)
-    
+
     # Initialize modules with respective size
     iteration = 1000
     gradient_step = 1e-3
@@ -44,11 +44,12 @@ def test_multiclass():
     m_linear2 = Linear(arbitrary_neural, output_size)
     m_act2 = Softmax()
     m_loss = CESoftMax()
-    
-    seq = Sequential([m_linear,m_act1,m_linear2])
-    
-    opt = Optim(seq,loss=m_loss,eps = gradient_step)
-    opt.SGD(alltrainx,alltrainy_proba,batch_size, X_val=allvalx,Y_val=allvaly,f_val=lambda x: np.argmax(x,axis=1), maxiter=iteration,verbose = 2)
+
+    seq = Sequential([m_linear, m_act1, m_linear2])
+
+    opt = Optim(seq, loss=m_loss, eps=gradient_step)
+    opt.SGD(alltrainx, alltrainy_proba, batch_size, X_val=allvalx, Y_val=allvaly, f_val=lambda x: np.argmax(x, axis=1),
+            maxiter=iteration, verbose=2)
 
     predict = m_act2.forward(opt.predict(alltestx))
     predict = np.argmax(predict, axis=1)

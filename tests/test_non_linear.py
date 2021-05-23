@@ -57,7 +57,6 @@ def test_non_linear():
         m_linear_second.backward_update_gradient(hidden_l_tanh, delta_sigmoid)
         m_linear_first.backward_update_gradient(datax, delta_tanh)
 
-
         m_linear_second.update_parameters(gradient_step=gradient_step)
         m_linear_first.update_parameters(gradient_step=gradient_step)
 

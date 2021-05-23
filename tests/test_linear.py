@@ -5,8 +5,9 @@ import numpy as np
 
 from src.Loss.MSE import MSE
 from src.Module.linear import Linear
-from src.Optim.optim import Optim
 from src.Module.sequential import Sequential
+from src.Optim.optim import Optim
+
 
 def test_linear():
     coef1 = 1002
@@ -93,14 +94,14 @@ def test_linear_SGD():
     # Initialize modules with respective size
     iteration = 50
     gradient_step = 1e-4
-    
+
     m_linear = Linear(input_size, output_size)
     m_mse = MSE()
-    
+
     seq = Sequential([m_linear])
-    opt = Optim(seq,loss=m_mse,eps = gradient_step)
-    opt.SGD(datax,datay,nb_data, maxiter=iteration,verbose = 2)
-    
+    opt = Optim(seq, loss=m_mse, eps=gradient_step)
+    opt.SGD(datax, datay, nb_data, maxiter=iteration, verbose=2)
+
     x1 = np.random.uniform(-10, 10, nb_data)
     x2 = np.random.uniform(-10, 10, nb_data)
     x1 = x1.reshape((-1, 1))
@@ -108,7 +109,7 @@ def test_linear_SGD():
     testy = f(x1, x2)
     testx = np.concatenate((x1, x2), axis=1)
     hidden_l = opt.predict(testx)
-    
+
     print("max différence res:", np.max(hidden_l - testy))
     print("parameters:", str(m_linear._parameters))
     print("valeurs voulues:", str([[coef1], [coef2]]))

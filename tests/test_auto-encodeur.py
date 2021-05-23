@@ -15,6 +15,7 @@ from src.Module.sequential import Sequential
 from src.Optim.optim import Optim
 from src.utils.utils import load_usps
 
+
 def plot_2D(alltesty, compression):
     """
     alltesty : y des données de test
@@ -24,10 +25,11 @@ def plot_2D(alltesty, compression):
     patches = [mpatches.Patch(color=colors[i], label=str(i)) for i in range(len(colors))]
     plt.legend(handles=patches)
     for nb in range(10):
-        data = np.where(alltesty==nb)
-        plt.scatter(compression[:,0][data],compression[:,1][data],color = colors[nb])
+        data = np.where(alltesty == nb)
+        plt.scatter(compression[:, 0][data], compression[:, 1][data], color=colors[nb])
     plt.show()
-    
+
+
 def TNSE(alltesty, compression):
     """
     alltesty : y des données de test
@@ -76,15 +78,14 @@ def cluster(comp_train, comp_test, alltrainy, alltesty):
 
 
 def test_auto_encodeur():
-    
     uspsdatatrain = "data/USPS_train.txt"
     uspsdatatest = "data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     alltrainx /= 2
     alltestx /= 2
-    
-    TNSE(alltesty,alltestx)
+
+    TNSE(alltesty, alltestx)
     return
 
     # Initialize modules with respective size
@@ -118,9 +119,7 @@ def test_auto_encodeur():
     predict = opt.predict(alltestx)
     compression_train = seq.forward(alltrainx)[-5]
     compression = seq.forward(alltestx)[-5]
-    
-        
-    
+
     """
     # print 
     for i in range(6):
@@ -133,10 +132,10 @@ def test_auto_encodeur():
     """
     # if compression_size == 2:
     #    plot_2D(alltesty, compression)
-    
-    TNSE(alltesty,alltestx)
+
+    TNSE(alltesty, alltestx)
     # return cluster(compression_train, compression, alltrainy, alltesty)
-    
+
 
 if __name__ == '__main__':
     test = test_auto_encodeur()

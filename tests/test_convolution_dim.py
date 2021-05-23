@@ -8,7 +8,6 @@ import numpy as np
 from src.Module.conv1D import Conv1D
 from src.Pooling.maxPool1D import MaxPool1D
 
-
 if __name__ == '__main__':
     batch_size = 25
     kernel_size = 4
@@ -30,7 +29,7 @@ if __name__ == '__main__':
     # forward size
     forward_conv = convolution.forward(X)
     assert forward_conv.shape == (batch_size, (length - kernel_size) // stride + 1, chan_output)
-    
+
     # operateur forward result
     res = convolution.operateur(X, i * stride)[image][filtre]
     w = convolution._parameters[:, :, filtre]
@@ -45,7 +44,7 @@ if __name__ == '__main__':
     delta = np.random.rand(forward_conv.shape[0], forward_conv.shape[1], forward_conv.shape[2])
     backward_conv = convolution.backward_delta(X, delta)
     assert backward_conv.shape == (batch_size, length, chan_input)
-    
+
     # backward_delta result
     res = backward_conv[image][i][filtre]
     # verification du reshape des parametres

@@ -1,6 +1,3 @@
-'''
-Faire des tests sur les dimensions des fonctions, rapide juste un assert pour Ãªtre sur
-'''
 import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics as skt
@@ -9,7 +6,7 @@ from src.Activation.softmax import Softmax
 from src.Activation.tanH import TanH
 from src.Loss.CESoftMax import CESoftMax
 from src.Module.linear import Linear
-from src.utils.utils import load_usps
+from src.utils.utils import load_usps, transform_numbers
 
 
 def test_multiclass():
@@ -41,33 +38,20 @@ def test_multiclass():
         hidden_l1 = m_linear.forward(alltrainx)
         act1 = m_act1.forward(hidden_l1)
         hidden_l2 = m_linear2.forward(act1)
-
-        # act2 = m_act2.forward(hidden_l2)
-        # loss = m_loss.forward(alltrainy_proba,act2)
         loss = m_loss.forward(alltrainy_proba, hidden_l2)
         # print("max loss:", np.mean(loss, axis=0))
 
-        loss = m_loss.forward(alltrainy_proba, hidden_l2)
         print("max loss:", np.mean(loss))
         print(loss.shape)
         # print("parameters",m_linear._parameters)
         # Etape Backward
 
         loss_back = m_loss.backward(alltrainy_proba, hidden_l2)
-        # print("loss_back",np.min(loss_back),np.max(loss_back))
-        # loss_back = m_loss.backward(alltrainy_proba, act2)
-        # act2_back = m_act2.backward_delta(hidden_l2, loss_back)
-        # hidden_l2_back = m_linear2.backward_delta(act1, act2_back)
         hidden_l2_back = m_linear2.backward_delta(act1, loss_back)
 
-        # print("hidden_l2_back",np.min(hidden_l2_back),np.max(hidden_l2_back))
         act1_back = m_act1.backward_delta(hidden_l1, hidden_l2_back)
-        # print("act1_back",np.min(act1_back),np.max(act1_back))
-        hidden_l1_back = m_linear.backward_delta(alltrainx, act1_back)
-        # print("hidden_l1_back",np.min(hidden_l1_back),np.max(hidden_l1_back))
 
         # update gradient
-        # m_linear2.backward_update_gradient(act1, act2_back)
         m_linear2.backward_update_gradient(act1, loss_back)
         m_linear.backward_update_gradient(alltrainx, act1_back)
 
@@ -91,4 +75,3 @@ def test_multiclass():
 
 if __name__ == '__main__':
     test_multiclass()
-    test_multiclass_SGD()

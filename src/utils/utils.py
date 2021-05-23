@@ -47,7 +47,7 @@ def chunks(lst, n):
 
 def transform_numbers(input, size):
     """Assume 1D array as input, len is the number of example
-    Transform into proba
+    Transform into proba array for each classes
     """
     datay_r = np.zeros((len(input), size))
     # Re-arranging data to compute a probability
