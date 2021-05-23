@@ -1,5 +1,3 @@
-import numpy as np
-
 from src.Module.module import Module
 
 
@@ -18,10 +16,8 @@ class Sequential(Module):
 
     def backward(self, list, delta):
         d = delta
-        # Je suis pas sur, mais je crois que la loss du cout n'est pas ici, donc on ne doit
-        # pas utiliser la dernier entrée dans le calcul du delta, mais l'avant dernier.
         list = list[:-1]
-        
+
         for m, i in zip(self._modules[::-1], list[::-1]):
             m.backward_update_gradient(i, d)
             d = m.backward_delta(i, d)
@@ -34,4 +30,3 @@ class Sequential(Module):
     def zero_grad(self):
         for m in self._modules:
             m.zero_grad()
-

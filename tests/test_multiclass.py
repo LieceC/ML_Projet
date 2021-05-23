@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics as skt
 
-from src.Activation.Softmax import Softmax
+from src.Activation.softmax import Softmax
 from src.Activation.tanH import TanH
 from src.Loss.CESoftMax import CESoftMax
-from src.Module.Linear import Linear
+from src.Module.linear import Linear
 from src.utils.utils import load_usps
 
 

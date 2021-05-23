@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics as skt
 
-from src.Activation.Softmax import Softmax
+from src.Activation.softmax import Softmax
 from src.Activation.sigmoid import Sigmoid
 from src.Loss.CESoftMax import CESoftMax
-from src.Module.Linear import Linear
+from src.Module.linear import Linear
 from src.Module.sequential import Sequential
-from src.Optim.Optim import Optim
+from src.Optim.optim import Optim
 from src.utils.utils import load_usps, transform_numbers
 
 

@@ -7,10 +7,10 @@ import numpy as np
 import src.utils.mltools as tools
 from src.Activation.sigmoid import Sigmoid
 from src.Activation.tanH import TanH
-from src.Loss.MSELoss import MSELoss
-from src.Module.Linear import Linear
+from src.Loss.MSE import MSE
+from src.Module.linear import Linear
 from src.Module.sequential import Sequential
-from src.Optim.Optim import Optim
+from src.Optim.optim import Optim
 
 
 def test_non_linear():
@@ -38,7 +38,7 @@ def test_non_linear():
     m_linear_second = Linear(hidden_size, final_size, bias=True)
     m_sig = Sigmoid()
     m_tanh = TanH()
-    m_mse = MSELoss()
+    m_mse = MSE()
 
     for _ in range(iteration):
         hidden_l = m_linear_first.forward(datax)
@@ -99,7 +99,7 @@ def test_non_linear_SGD():
                       Linear(hidden_size, final_size, bias=True),
                       Sigmoid()])
 
-    opt = Optim(net=net, loss=MSELoss(), eps=gradient_step)
+    opt = Optim(net=net, loss=MSE(), eps=gradient_step)
     opt.SGD(datax, datay, batch_size, maxiter=iteration, verbose=2)
 
     def yhat(x):

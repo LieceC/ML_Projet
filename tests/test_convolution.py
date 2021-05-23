@@ -8,14 +8,14 @@ import numpy as np
 from src.Activation.ReLU import ReLU
 from src.Activation.leakyReLU import LeakyReLU
 from src.Loss.CESoftMax import CESoftMax
-from src.Module.Conv1D import Conv1D
-from src.Module.Linear import Linear
+from src.Module.conv1D import Conv1D
+from src.Module.linear import Linear
 from src.Module.flatten import Flatten
 from src.Module.sequential import Sequential
-from src.Optim.Optim import Optim
+from src.Optim.optim import Optim
 from src.Pooling.maxPool1D import MaxPool1D
 from src.utils.utils import load_usps, transform_numbers
-from src.Activation.Softmax import Softmax
+from src.Activation.softmax import Softmax
 
 
 if __name__ == '__main__':

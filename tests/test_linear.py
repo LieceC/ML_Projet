@@ -3,9 +3,9 @@ Faire des tests sur les dimensions des fonctions, rapide juste un assert pour Ã
 '''
 import numpy as np
 
-from src.Loss.MSELoss import MSELoss
-from src.Module.Linear import Linear
-from src.Optim.Optim import Optim
+from src.Loss.MSE import MSE
+from src.Module.linear import Linear
+from src.Optim.optim import Optim
 from src.Module.sequential import Sequential
 
 def test_linear():
@@ -37,7 +37,7 @@ def test_linear():
     # Initialize modules with respective size
     iteration = 300
     gradient_step = 1e-4
-    m_mse = MSELoss()
+    m_mse = MSE()
     m_linear = Linear(input_size, output_size)
 
     for _ in range(iteration):
@@ -95,7 +95,7 @@ def test_linear_SGD():
     gradient_step = 1e-4
     
     m_linear = Linear(input_size, output_size)
-    m_mse = MSELoss()
+    m_mse = MSE()
     
     seq = Sequential([m_linear])
     opt = Optim(seq,loss=m_mse,eps = gradient_step)

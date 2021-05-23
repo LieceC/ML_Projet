@@ -1,15 +1,15 @@
 import numpy as np
 
 from src.Activation.ReLU import ReLU
-from src.Activation.Softmax import Softmax
 from src.Activation.sigmoid import Sigmoid
+from src.Activation.softmax import Softmax
 from src.Activation.tanH import TanH
 from src.Loss.BCE import BCE
 from src.Loss.CESoftMax import CE
-from src.Loss.MSELoss import MSELoss
-from src.Module.Conv1D import Conv1D
-from src.Module.Linear import Linear
+from src.Loss.MSE import MSE
+from src.Module.conv1D import Conv1D
 from src.Module.flatten import Flatten
+from src.Module.linear import Linear
 from src.Pooling.maxPool1D import MaxPool1D
 
 np.random.seed(1)
@@ -26,7 +26,7 @@ conv1D = Conv1D(k_size=3, chan_in=1, chan_out=5, stride=2)
 maxpool1D = MaxPool1D(k_size=2, stride=2)
 flatten = Flatten()
 
-mse = MSELoss()
+mse = MSE()
 bce = BCE()
 crossentr = CE()  # cross entropy avec log softmax
 

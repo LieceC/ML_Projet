@@ -5,8 +5,8 @@ import numpy as np
 
 import src.utils.mltools as tools
 from src.Activation.sigmoid import Sigmoid
-from src.Loss.MSELoss import MSELoss
-from src.Module.Linear import Linear
+from src.Loss.MSE import MSE
+from src.Module.linear import Linear
 
 if __name__ == '__main__':
     # generation of tests data
@@ -23,7 +23,7 @@ if __name__ == '__main__':
     input_size = len(datax[0])
     output_size = len(np.unique(datay))
     # Initialize modules with respective size
-    m_mse = MSELoss()
+    m_mse = MSE()
     m_linear = Linear(input_size, output_size)
     m_sigmoid = Sigmoid()
     # Etape forward

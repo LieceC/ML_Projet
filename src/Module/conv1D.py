@@ -53,7 +53,6 @@ class Conv1D(Module):
 
         for i, (begin, end) in enumerate(z):
             d = np.dot(delta[:, i, :], reshaped_parameters)
-            # assert d[0,2*self._chan_in+1] == d.reshape(-1, self._k_size, self._chan_in)[0,2,1] # verification du reshape
             res[:, begin:end] += d.reshape(-1, self._k_size,
-                                           self._chan_in)  # remet les entrées comme précédemment
+                                           self._chan_in)
         return res

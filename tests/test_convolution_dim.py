@@ -5,7 +5,7 @@ Faire des tests sur les dimensions des fonctions, rapide juste un assert pour Ã
 '''
 import numpy as np
 
-from src.Module.Conv1D import Conv1D
+from src.Module.conv1D import Conv1D
 from src.Pooling.maxPool1D import MaxPool1D
 
 

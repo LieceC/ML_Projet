@@ -1,15 +1,17 @@
-import numpy as np
-from src.Loss.MSELoss import MSELoss
-from src.utils.utils import unison_shuffled_copies, chunks
-import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import numpy as np
+
+from src.Loss.MSE import MSE
+from src.utils.utils import unison_shuffled_copies, chunks
+
 
 class Optim(object):
     """
     Assum that net is a sequential class
     """
 
-    def __init__(self, net, loss=MSELoss(), eps=1e-3):
+    def __init__(self, net, loss=MSE(), eps=1e-3):
         self._loss = loss
         self._eps = eps
         self._net = net
@@ -29,7 +31,7 @@ class Optim(object):
         self._net.zero_grad()
         return loss
 
-    def SGD(self, X, Y, batch_size, X_val = None, Y_val = None, f_val = lambda x : x, maxiter=10, verbose=False):
+    def SGD(self, X, Y, batch_size, X_val=None, Y_val=None, f_val=lambda x: x, maxiter=10, verbose=False):
         """
     
             Parameters
@@ -73,37 +75,37 @@ class Optim(object):
             for j in range(nb_batchs):
                 loss_batch[j] = self.step(datax_rand_batch[j], datay_rand_batch[j]).mean()
                 losss += [loss_batch[j]]
-            if X_val is not None: # calcul validation
+            if X_val is not None:  # calcul validation
                 predict = self.predict(X_val)
                 y_hat = f_val(predict)
-                precision_val += [sum(y_hat == Y_val)/len(Y_val)]
-                
-            if verbose >= 1: 
-                print("iteration "+str(i)+":")
+                precision_val += [sum(y_hat == Y_val) / len(Y_val)]
+
+            if verbose >= 1:
+                print("iteration " + str(i) + ":")
                 print("Loss")
-                print("mean - "+str(loss_batch.mean()) + "\nstd - "+str(loss_batch.std())) 
+                print("mean - " + str(loss_batch.mean()) + "\nstd - " + str(loss_batch.std()))
         if verbose == 2:
-            patches = [mpatches.Patch(color='red', label = 'variance sur iterations'),
-                       mpatches.Patch(color='green', label = 'moyenne sur iterations'),
-                       mpatches.Patch(color='blue', label = 'evolution sur les batchs')
+            patches = [mpatches.Patch(color='red', label='variance sur iterations'),
+                       mpatches.Patch(color='green', label='moyenne sur iterations'),
+                       mpatches.Patch(color='blue', label='evolution sur les batchs')
                        ]
             losss = np.array(losss)
-            x = np.arange(1/nb_batchs,maxiter+1/nb_batchs,1/nb_batchs)
-            plt.plot(x,losss,color="blue")
+            x = np.arange(1 / nb_batchs, maxiter + 1 / nb_batchs, 1 / nb_batchs)
+            plt.plot(x, losss, color="blue")
             plt.title("Evolution de la loss en fonction du nombre d'itérations")
             plt.legend(handles=patches[-1:])
             plt.show()
-            
-            x = np.arange(1,maxiter+1/nb_batchs,1)
-            losss_2 = losss.reshape(-1,nb_batchs)
-            plt.plot(x,losss_2.mean(axis=1),color='green')
-            plt.plot(x,losss_2.std(axis=1),color='red')
+
+            x = np.arange(1, maxiter + 1 / nb_batchs, 1)
+            losss_2 = losss.reshape(-1, nb_batchs)
+            plt.plot(x, losss_2.mean(axis=1), color='green')
+            plt.plot(x, losss_2.std(axis=1), color='red')
             plt.title("Evolution de la loss en fonction du nombre d'itérations")
             plt.legend(handles=patches[:-1])
             plt.show()
         if X_val is not None:
-            x = np.arange(1,maxiter+1)
-            plt.plot(x,precision_val,color="blue")
+            x = np.arange(1, maxiter + 1)
+            plt.plot(x, precision_val, color="blue")
             plt.title("Evolution de la précision en fonction du nombre d'itérations")
             plt.show()
 

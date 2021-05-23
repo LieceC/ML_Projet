@@ -5,7 +5,7 @@ import numpy as np
 from src.Loss.loss import Loss
 
 
-class MSELoss(Loss):
+class MSE(Loss):
     def forward(self, y, yhat):
         '''
         y et yhat de taille (batch,d)

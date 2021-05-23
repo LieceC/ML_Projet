@@ -10,9 +10,9 @@ from sklearn.metrics import confusion_matrix, adjusted_rand_score
 from src.Activation.sigmoid import Sigmoid
 from src.Activation.tanH import TanH
 from src.Loss.BCE import BCE
-from src.Module.Linear import Linear
+from src.Module.linear import Linear
 from src.Module.sequential import Sequential
-from src.Optim.Optim import Optim
+from src.Optim.optim import Optim
 from src.utils.utils import load_usps
 
 def plot_2D(alltesty, compression):
