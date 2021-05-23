@@ -63,7 +63,6 @@ class Optim(object):
         assert X_val is None or (Y_val is not None and len(X_val) == len(Y_val))
         losss = []
         precision_val = []
-        recall_val = []
         for i in range(maxiter):
             datax_rand, datay_rand = unison_shuffled_copies(X, Y)
             datax_rand_batch, datay_rand_batch = list(chunks(datax_rand, batch_size)), list(
@@ -76,7 +75,7 @@ class Optim(object):
                 losss += [loss_batch[j]]
             if X_val is not None: # calcul validation
                 predict = self.predict(X_val)
-                y_hat = np.argmax(predict,axis=1)
+                y_hat = f_val(predict)
                 precision_val += [sum(y_hat == Y_val)/len(Y_val)]
                 
             if verbose >= 1: 
