@@ -18,8 +18,8 @@ from src.utils.utils import load_usps, transform_numbers
 
 if __name__ == '__main__':
     # Get the data
-    uspsdatatrain = "data/USPS_train.txt"
-    uspsdatatest = "data/USPS_test.txt"
+    uspsdatatrain = "../data/USPS_train.txt"
+    uspsdatatest = "../data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     alltrainy_proba = transform_numbers(alltrainy, np.unique(alltrainy).shape[0])
@@ -35,7 +35,7 @@ if __name__ == '__main__':
     length = alltrainx.shape[1]
     # Network parameters
     gradient_step = 1e-3
-    iterations = 1000
+    iterations = 10
     batch_size = 25
     kernel_size = 3
     chan_input = 1

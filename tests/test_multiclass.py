@@ -15,8 +15,8 @@ def test_multiclass():
     testy = np.where(testy == neg, -1, 1)
     :return:
     """
-    uspsdatatrain = "data/USPS_train.txt"
-    uspsdatatest = "data/USPS_test.txt"
+    uspsdatatrain = "../data/USPS_train.txt"
+    uspsdatatest = "../data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     input_size = len(alltrainx[0])
@@ -42,8 +42,6 @@ def test_multiclass():
         # print("max loss:", np.mean(loss, axis=0))
 
         print("max loss:", np.mean(loss))
-        print(loss.shape)
-        # print("parameters",m_linear._parameters)
         # Etape Backward
 
         loss_back = m_loss.backward(alltrainy_proba, hidden_l2)

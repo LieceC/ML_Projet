@@ -109,7 +109,7 @@ def test_auto_encodeur():
         plt.show()
         plt.imshow(predict[i].reshape((size, size)))
         plt.show()
-        plt.imshow(compression[i])
+        plt.imshow(compression[i].reshape(-1, 1))
         plt.show()
 
     # TNSE(alltesty,compression)

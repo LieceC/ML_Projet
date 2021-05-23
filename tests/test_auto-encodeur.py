@@ -78,8 +78,8 @@ def cluster(comp_train, comp_test, alltrainy, alltesty):
 
 
 def test_auto_encodeur():
-    uspsdatatrain = "data/USPS_train.txt"
-    uspsdatatest = "data/USPS_test.txt"
+    uspsdatatrain = "../data/USPS_train.txt"
+    uspsdatatest = "../data/USPS_test.txt"
     alltrainx, alltrainy = load_usps(uspsdatatrain)
     alltestx, alltesty = load_usps(uspsdatatest)
     alltrainx /= 2
